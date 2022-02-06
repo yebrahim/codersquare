@@ -29,7 +29,8 @@ We'll need at least the following entities to implement the service:
 | ID | STRING/UUID |
 | First/Last name | STRING |
 | Password | STRING |
-| Email (optional) | STRING |
+| Email | STRING |
+| Username | STRING |
 
 **Posts**:
 | Column | Type |
@@ -49,6 +50,7 @@ We'll need at least the following entities to implement the service:
 **Comments**:
 | Column | Type |
 |---------|------|
+| ID | STRING |
 | UserId | STRING/UUID |
 | PostId | STRING |
 | Comment | STRING |
@@ -59,9 +61,9 @@ We'll need at least the following entities to implement the service:
 A simple HTTP server is responsible for authentication, serving stored data, and
 potentially ingesting and serving analytics data.
 
--   Node.js is selected for implementing the server for speed of development.
--   Express.js is the web server framework.
--   Sequelize to be used as an ORM.
+- Node.js is selected for implementing the server for speed of development.
+- Express.js is the web server framework.
+- Sequelize to be used as an ORM.
 
 ### Auth
 
@@ -120,4 +122,3 @@ We'll deploy the server to a (likely shared) VPS for flexibility. The VM will ha
 HTTP/HTTPS ports open, and we'll start with a manual deployment, to be automated
 later using Github actions or similar. The server will have closed CORS policy except
 for the domain name and the web host server.
-
