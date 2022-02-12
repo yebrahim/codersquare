@@ -1,4 +1,4 @@
-import { Post } from './types';
+import { Like, Post } from './types';
 
 // Post APIs
 export interface ListPostsRequest {}
@@ -17,5 +17,11 @@ export interface GetPostResponse {
 // Comment APIs
 
 // Like APIs
+export type CreateLikeRequest = Like
+export interface CreateLikeResponse {}
+export type GetLikesRequest = String;
+export interface GetLikesResponse{
+  likes: Number
+}
 
 // User APIs
