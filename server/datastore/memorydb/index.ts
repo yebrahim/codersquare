@@ -1,4 +1,4 @@
-import { Datastore } from '../';
+import { Datastore, db } from '../';
 import { User, Post, Like, Comment } from '../../types';
 
 export class InMemoryDatastore implements Datastore {
@@ -57,5 +57,13 @@ export class InMemoryDatastore implements Datastore {
       return;
     }
     this.posts.splice(index, 1);
+  }
+
+  getLikes(postId: string): number {
+    return this.likes.filter(x => x.postId == postId).length;
+  }
+
+  isDuplicateLike(like: Like): boolean {
+    return this.likes.filter(x => like.postId == like.postId && x.userId == like.userId).length > 0;
   }
 }

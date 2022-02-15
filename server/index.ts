@@ -1,25 +1,22 @@
 import express, { ErrorRequestHandler, RequestHandler } from 'express';
 
+import { createLikeHandler, getLikesHandler } from './handlers/likeHandler';
 import { createPostHandler, listPostsHandler } from './handlers/postHandler';
+import { globalErrorHandler } from './middlewares/globalErrorHandler';
+import { requestLoggerMiddleware } from './middlewares/requestLoggerHandler';
 
 const app = express();
 
+//Middleware
 app.use(express.json());
-
-const requestLoggerMiddleware: RequestHandler = (req, res, next) => {
-  console.log(req.method, req.path, '- body:', req.body);
-  next();
-};
-
 app.use(requestLoggerMiddleware);
 
 app.get('/v1/posts', listPostsHandler);
 app.post('/v1/posts', createPostHandler);
 
-const errHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error('Uncaught exception:', err);
-  return res.status(500).send('Oops, an unexpected error occurred, please try again');
-};
-app.use(errHandler);
+app.post('/v1/likes', createLikeHandler);
+app.get('/v1/likes/:postId', getLikesHandler);
+
+app.use(globalErrorHandler);
 
 app.listen(3000);
