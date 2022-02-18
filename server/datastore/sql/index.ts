@@ -81,4 +81,10 @@ export class SqlDataStore implements Datastore {
   deleteComment(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
+  getLikes(postId: string): Promise<number> {
+    throw new Error('Method not implemented.');
+  }
+  isDuplicateLike(like: Like): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }
