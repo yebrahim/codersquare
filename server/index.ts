@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler';
 import { initDb } from './datastore';
 import { createCommentHandler, deleteCommentHandler } from './handlers/commentHandler';
 import { createLikeHandler, getLikesHandler } from './handlers/likeHandler';
-import { createPostHandler, deletePostHandler, listPostsHandler } from './handlers/postHandler';
+import { createPostHandler, deletePostHandler, getPostHandler, listPostsHandler } from './handlers/postHandler';
 import { signInHandler, signUpHandler } from './handlers/userHandler';
 import { globalErrorHandlerMiddleware } from './middleware/globalErrorHandlerMiddleware';
 import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
@@ -18,18 +18,23 @@ import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
 
   app.use(requestLoggerMiddleware);
 
-  app.get('/v1/posts', asyncHandler(listPostsHandler));
-  app.post('/v1/posts', asyncHandler(createPostHandler));
-  app.delete('/v1/posts', asyncHandler(deletePostHandler));
+  app.get('/v1/posts/list', asyncHandler(listPostsHandler));
+  app.post('/v1/posts/new', asyncHandler(createPostHandler));
+  app.delete('/v1/posts/:id', asyncHandler(deletePostHandler));
+  app.get('/v1/posts/:id', asyncHandler(getPostHandler));
 
   app.post('/v1/signup', asyncHandler(signUpHandler));
   app.post('/v1/signin', asyncHandler(signInHandler));
-
-  app.post('/v1/likes', asyncHandler(createLikeHandler));
+  //TODO Create signOutHandler
+ // app.post('/v1/signOut', asyncHandler(signOutHandler));
+ 
+  app.post('/v1/likes/new', asyncHandler(createLikeHandler));
   app.get('/v1/likes/:postId', asyncHandler(getLikesHandler));
 
-  app.post('/v1/comments', asyncHandler(createCommentHandler));
-  app.delete('/v1/comments', asyncHandler(deleteCommentHandler));
+  app.post('/v1/comments/new', asyncHandler(createCommentHandler));
+  //TODO: implement getCommentsHandler
+  //app.get('/v1/comments/list',asyncHandler(getCommentsHandler) )
+  app.delete('/v1/comments/:id', asyncHandler(deleteCommentHandler));
 
   app.use(globalErrorHandlerMiddleware);
 
