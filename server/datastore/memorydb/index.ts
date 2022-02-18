@@ -68,4 +68,12 @@ export class InMemoryDatastore implements Datastore {
     this.posts.splice(index, 1);
     return Promise.resolve();
   }
+  
+  //TODO:revisit and fix impl
+  getLikes(postId: string): Promise<number> {
+    return Promise.resolve(15);
+  }
+  isDuplicateLike(like: Like): Promise<boolean> {
+    return Promise.resolve(false);
+  }
 }
