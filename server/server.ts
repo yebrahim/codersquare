@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express, { ErrorRequestHandler, RequestHandler } from 'express';
+import express from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { initDb } from './datastore';
