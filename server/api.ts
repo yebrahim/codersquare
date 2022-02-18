@@ -10,7 +10,7 @@ export type CreatePostRequest = Pick<Post, 'title' | 'url'>;
 export type DeletePostRequest = { postId: string };
 export type DeletePostResponse = {};
 export interface CreatePostResponse {}
-export interface GetPostRequest {}
+export type GetPostRequest = {postId:string}
 export interface GetPostResponse {
   post: Post;
 }

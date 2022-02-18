@@ -1,6 +1,15 @@
 import crypto from 'crypto';
 
-import { CreatePostRequest, CreatePostResponse, ListPostsRequest, ListPostsResponse } from '../api';
+import {
+  CreatePostRequest,
+  CreatePostResponse,
+  DeletePostRequest,
+  DeletePostResponse,
+  GetPostRequest,
+  GetPostResponse,
+  ListPostsRequest,
+  ListPostsResponse,
+} from '../api';
 import { db } from '../datastore';
 import { ExpressHandler, Post } from '../types';
 
@@ -34,4 +43,19 @@ export const createPostHandler: ExpressHandler<CreatePostRequest, CreatePostResp
   };
   await db.createPost(post);
   return res.sendStatus(200);
+};
+
+export const deletePostHandler: ExpressHandler<DeletePostRequest, DeletePostResponse> = async (
+  req,
+  res
+) => {
+  if (req.body.postId === '' || req.body.postId === undefined) return res.sendStatus(404);
+  db.deletePost(req.body.postId);
+  return res.sendStatus(200);
+};
+
+export const getPostHandler: ExpressHandler<GetPostRequest, GetPostResponse> = async (req, res) => {
+  if (req.body.postId === '' || req.body.postId === undefined) return res.sendStatus(400);
+  const postToReturn: Post | undefined = await db.getPost(req.body.postId);
+  return res.send({ post: postToReturn });
 };
