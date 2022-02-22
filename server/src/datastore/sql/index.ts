@@ -2,7 +2,7 @@ import path from 'path';
 import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
-import { Datastore } from '..';
+import { Datastore } from '../../datastore';
 import { Comment, Like, Post, User } from '../../types';
 
 export class SqlDataStore implements Datastore {
@@ -65,8 +65,8 @@ export class SqlDataStore implements Datastore {
   deletePost(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  createLike(like: Like): Promise<void> {
-    throw new Error('Method not implemented.');
+  async createLike(like: Like): Promise<void> {
+    await this.db.run('INSERT INTO likes (postId, userId) VALUES (?,?)', like.postId, like.userId);
   }
   createComment(comment: Comment): Promise<void> {
     throw new Error('Method not implemented.');

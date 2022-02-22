@@ -1,4 +1,4 @@
-import app from './app';
+import { app } from './app';
 import { initDb } from './datastore';
 
 const initServer = async () => {

@@ -4,7 +4,7 @@ import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '..
 import { db } from '../datastore';
 import { ExpressHandler, User } from '../types';
 
-export const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
+ const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
   const { login, password } = req.body;
   if (!login || !password) {
     return res.sendStatus(400);
@@ -24,7 +24,7 @@ export const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = asyn
   });
 };
 
-export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
+ const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
   const { email, firstName, lastName, password, username } = req.body;
   if (!email || !firstName || !lastName || !username || !password) {
     return res.status(400).send('All fields are required');
@@ -46,3 +46,7 @@ export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = asyn
   await db.createUser(user);
   return res.sendStatus(200);
 };
+
+export {
+  signInHandler,signUpHandler
+}
