@@ -64,4 +64,14 @@ export class InMemoryDatastore implements Datastore {
     this.posts.splice(index, 1);
     return Promise.resolve();
   }
+
+  getLikes(postId: string): Promise<number> {
+    const likes = this.likes.filter(x => x.postId === postId).length;
+    return Promise.resolve(likes);
+  }
+
+  isDuplicateLike(like: Like): Promise<boolean> {
+    const isExists = this.likes.indexOf(like) > 0 ; 
+    return Promise.resolve(isExists);
+  }
 }
