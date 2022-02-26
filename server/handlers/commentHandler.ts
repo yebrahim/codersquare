@@ -7,13 +7,13 @@ import crypto from 'crypto';
 export const createCommentHandler
     :ExpressHandler<CreateCommentRequest,CreateCommentResponse> = async (req,res)=>{
 
-    if(req.body.postId === '' || req.body.postId === undefined)
+    if(!req.body.postId)
         return res.status(400).send("No Post Id");
     
-    if(req.body.userId === '' || req.body.userId === undefined)
+    if(!req.body.userId)
         return res.status(400).send("No User Id");
     
-    if(req.body.comment === '' || req.body.comment === undefined)
+    if(!req.body.comment)
         return res.status(400).send("No Comment");
 
     const commentForInsertion:Comment = {
@@ -32,7 +32,7 @@ export const deleteCommentHandler: ExpressHandler<DeleteCommentRequest, DeleteCo
     req,
     res
   ) => {
-    if (req.body.commentId === '' || req.body.commentId === undefined)
+    if (!req.body.commentId)
        return res.status(404).send("No Comment Id");
     await db.deleteComment(req.body.commentId);
     return res.sendStatus(200);

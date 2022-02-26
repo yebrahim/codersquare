@@ -49,13 +49,13 @@ export const deletePostHandler: ExpressHandler<DeletePostRequest, DeletePostResp
   req,
   res
 ) => {
-  if (req.body.postId === '' || req.body.postId === undefined) return res.sendStatus(404);
+  if (!req.body.postId) return res.sendStatus(404);
   db.deletePost(req.body.postId);
   return res.sendStatus(200);
 };
 
 export const getPostHandler: ExpressHandler<GetPostRequest, GetPostResponse> = async (req, res) => {
-  if (req.body.postId === '' || req.body.postId === undefined) return res.sendStatus(400);
+  if (!req.body.postId) return res.sendStatus(400);
   const postToReturn: Post | undefined = await db.getPost(req.body.postId);
   return res.send({ post: postToReturn });
 };
