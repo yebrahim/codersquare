@@ -25,9 +25,7 @@ import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
 
   app.post('/v1/signup', asyncHandler(signUpHandler));
   app.post('/v1/signin', asyncHandler(signInHandler));
-  //TODO Create signOutHandler
- // app.post('/v1/signOut', asyncHandler(signOutHandler));
- 
+  
   app.post('/v1/likes/new', asyncHandler(createLikeHandler));
   app.get('/v1/likes/:postId', asyncHandler(getLikesHandler));
 
