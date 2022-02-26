@@ -6,6 +6,7 @@ export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResp
   req,
   res
 ) => {
+  //TODO:Get Userid from Session
   if (!req.body.postId) {
     return res.status(400).send('No Post Id');
   }

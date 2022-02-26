@@ -49,7 +49,7 @@ export const deletePostHandler: ExpressHandler<DeletePostRequest, DeletePostResp
   req,
   res
 ) => {
-  if (!req.body.postId) return res.sendStatus(404);
+  if (!req.body.postId) return res.sendStatus(400);
   db.deletePost(req.body.postId);
   return res.sendStatus(200);
 };
