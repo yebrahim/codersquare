@@ -17,7 +17,7 @@ export interface GetPostResponse {
 // Comment APIs
 export type CreateCommentRequest = Pick<Comment, 'userId' | 'postId' | 'comment'>;
 export interface CreateCommentResponse {}
-export type GetCommentsRequest = { postId: string | undefined };
+export type GetCommentsRequest = { postId: string };
 export interface GetCommentsResponse {
   comments: Comment[];
 }
@@ -44,13 +44,3 @@ export interface SignInRequest {
   password: string;
 }
 export type SignInResponse = Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
-export type GetUserByEmailRequest = { emailId: string };
-export interface GetUserByEmailResponse {
-  user: User;
-}
-export type GetUserByUserNameRequest = {
-  username: string;
-};
-export interface GetUserByUserNameResponse {
-  user: User;
-}

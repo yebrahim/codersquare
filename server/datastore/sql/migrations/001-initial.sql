@@ -16,20 +16,4 @@ CREATE TABLE posts (
   FOREIGN KEY (userId) REFERENCES users (id)
 );
 
-CREATE Table comments (
-  id      VARCHAR PRIMARY KEY,
-  userId  VARCHAR NOT NULL,
-  PostId  VARCHAR NOT NULL,
-  Comment VARCHAR NOT NULL,
-  PostedAt INTEGER NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users (id),
-  FOREIGN KEY (PostId) REFERENCES posts (id)
-)
-
-CREATE Table likes (
-  UserId  VARCHAR NOT NULL,
-  PostId  VARCHAR NOT NULL,
-  FOREIGN KEY (UserId) REFERENCES users (id),
-  FOREIGN KEY (PostId) REFERENCES posts (id)
-)
 
