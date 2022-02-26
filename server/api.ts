@@ -10,7 +10,7 @@ export type CreatePostRequest = Pick<Post, 'title' | 'url'>;
 export type DeletePostRequest = { postId: string };
 export type DeletePostResponse = {};
 export interface CreatePostResponse {}
-export type GetPostRequest = {postId:string}
+export type GetPostRequest = { postId: string };
 export interface GetPostResponse {
   post: Post;
 }
@@ -18,7 +18,7 @@ export interface GetPostResponse {
 // Comment APIs
 export type CreateCommentRequest = Pick<Comment, 'userId' | 'postId' | 'comment'>;
 export interface CreateCommentResponse {}
-export type GetCommentsRequest = { postId: string | undefined };
+export type GetCommentsRequest = { postId: string };
 export interface GetCommentsResponse {
   comments: Comment[];
 }

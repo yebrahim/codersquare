@@ -75,7 +75,7 @@ export class InMemoryDatastore implements Datastore {
   }
 
   isDuplicateLike(like: Like): Promise<boolean> {
-     const isExists = this.likes.filter(x => x.postId === like.postId && x.userId === like.userId).length > 0;
-     return Promise.resolve(isExists);
+    const isExists = this.likes.indexOf(like) > 0 ; 
+    return Promise.resolve(isExists);
   }
 }
