@@ -59,28 +59,47 @@ export class SqlDataStore implements Datastore {
     );
   }
 
-  getPost(id: string): Promise<Post | undefined> {
-    throw new Error('Method not implemented.');
+  async getPost(id: string): Promise<Post | undefined> {
+    // throw new Error('Method not implemented.');
+    return await this.db.get<Post>('SELECT TOP 1 From posts where postId = ?', id);
   }
-  deletePost(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async deletePost(id: string): Promise<void> {
+    await this.db.run('Delete FROM posts WHERE id=?', id);
   }
-  createLike(like: Like): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async createLike(like: Like): Promise<void> {
+    await this.db.run('INSERT INTO Likes(UserId,PostId) VALUES(?,?)', like.userId, like.postId);
   }
-  createComment(comment: Comment): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async createComment(comment: Comment): Promise<void> {
+    await this.db.run(
+      'INSERT INTO Comments(UserId,PostId,Comment,PostedAt) VALUES(?,?)',
+      comment.userId,
+      comment.postId,
+      comment.comment,
+      comment.postedAt
+    );
   }
-  listComments(postId: string): Promise<Comment[]> {
-    throw new Error('Method not implemented.');
+
+  async listComments(postId: string): Promise<Comment[]> {
+    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE PostId=?', postId);
   }
-  deleteComment(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  async deleteComment(id: string): Promise<void> {
+    await this.db.run('Delete From Comments Where Id=?', id);
   }
-  getLikes(postId: string): Promise<number> {
-    throw new Error('Method not implemented.');
+
+  async getLikes(postId: string): Promise<number> {
+    let awaitResult = await this.db.get<number|undefined>('Select count(*) From Likes Where postId=?', postId);
+    let val:number = awaitResult === undefined?0:awaitResult;
+    return val;
   }
-  isDuplicateLike(like: Like): Promise<boolean> {
-    throw new Error('Method not implemented.');
+
+  async isDuplicateLike(like: Like): Promise<boolean> {
+    let awaitResult = await this.db.get<number>('SELECT 1 FROM likes WHERE postId=?,userId=?',like.postId,like.userId);
+    let val:boolean = awaitResult ===undefined?false:true;
+    return val;
   }
+  
 }
