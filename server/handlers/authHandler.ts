@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
+import { signJwt } from '../auth';
 import { db } from '../datastore';
 import { ExpressHandler, User } from '../types';
 
@@ -15,24 +16,29 @@ export const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = asyn
     return res.sendStatus(403);
   }
 
+  const jwt = signJwt({ userId: existing.id });
+
   return res.status(200).send({
-    email: existing.email,
-    firstName: existing.firstName,
-    lastName: existing.lastName,
-    id: existing.id,
-    username: existing.username,
+    user: {
+      email: existing.email,
+      firstName: existing.firstName,
+      lastName: existing.lastName,
+      id: existing.id,
+      username: existing.username,
+    },
+    jwt,
   });
 };
 
 export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
   const { email, firstName, lastName, password, username } = req.body;
   if (!email || !firstName || !lastName || !username || !password) {
-    return res.status(400).send('All fields are required');
+    return res.status(400).send({ error: 'All fields are required' });
   }
 
   const existing = (await db.getUserByEmail(email)) || (await db.getUserByUsername(username));
   if (existing) {
-    return res.status(403).send('User already exists');
+    return res.status(403).send({ error: 'User already exists' });
   }
 
   const user: User = {
@@ -44,5 +50,8 @@ export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = asyn
     password,
   };
   await db.createUser(user);
-  return res.sendStatus(200);
+  const jwt = signJwt({ userId: user.id });
+  return res.status(200).send({
+    jwt,
+  });
 };
