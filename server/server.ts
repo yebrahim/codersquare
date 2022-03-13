@@ -5,9 +5,9 @@ import { initDb } from './datastore';
 import { createCommentHandler, deleteCommentHandler } from './handlers/commentHandler';
 import { createLikeHandler, getLikesHandler } from './handlers/likeHandler';
 import { createPostHandler, deletePostHandler, getPostHandler, listPostsHandler } from './handlers/postHandler';
-import { signInHandler, signUpHandler } from './handlers/userHandler';
-import { globalErrorHandlerMiddleware } from './middleware/globalErrorHandlerMiddleware';
-import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
+import { signInHandler, signUpHandler } from './handlers/authHandler';
+import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware';
+import { loggerMiddleware } from './middleware/loggerMiddleware';
 
 (async () => {
   await initDb();
@@ -16,7 +16,7 @@ import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
 
   app.use(express.json());
 
-  app.use(requestLoggerMiddleware);
+  app.use(loggerMiddleware);
 
   app.get('/v1/posts/list', asyncHandler(listPostsHandler));
   app.post('/v1/posts/new', asyncHandler(createPostHandler));
@@ -34,7 +34,7 @@ import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
   //app.get('/v1/comments/list',asyncHandler(getCommentsHandler) )
   app.delete('/v1/comments/:id', asyncHandler(deleteCommentHandler));
 
-  app.use(globalErrorHandlerMiddleware);
+  app.use(errorHandlerMiddleware);
 
   app.listen(3000);
 })();
