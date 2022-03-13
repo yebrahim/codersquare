@@ -12,12 +12,16 @@ export class InMemoryDatastore implements Datastore {
     return Promise.resolve();
   }
 
+  getUserById(id: string): Promise<User | undefined> {
+    return Promise.resolve(this.users.find(u => u.id === id));
+  }
+
   getUserByEmail(email: string): Promise<User | undefined> {
     return Promise.resolve(this.users.find(u => u.email === email));
   }
 
-  getUserByUsername(email: string): Promise<User | undefined> {
-    return Promise.resolve(this.users.find(u => u.username === email));
+  getUserByUsername(userName: string): Promise<User | undefined> {
+    return Promise.resolve(this.users.find(u => u.username === userName));
   }
 
   listPosts(): Promise<Post[]> {
@@ -71,7 +75,7 @@ export class InMemoryDatastore implements Datastore {
   }
 
   isDuplicateLike(like: Like): Promise<boolean> {
-    const isExists = this.likes.indexOf(like) >= 0 ; 
+    const isExists = this.likes.indexOf(like) >= 0;
     return Promise.resolve(isExists);
   }
 }

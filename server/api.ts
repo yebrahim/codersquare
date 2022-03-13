@@ -37,10 +37,16 @@ export type SignUpRequest = Pick<
   User,
   'email' | 'firstName' | 'lastName' | 'username' | 'password'
 >;
-export interface SignUpResponse {}
+export interface SignUpResponse {
+  jwt: string
+}
 
 export interface SignInRequest {
   login: string; // username or email
   password: string;
 }
-export type SignInResponse = Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
+
+export type SignInResponse = 
+{ user: Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
+  jwt: string;
+}
