@@ -35,6 +35,10 @@ export class SqlDataStore implements Datastore {
       user.username
     );
   }
+  
+  getUserById(id: string): Promise<User | undefined> {
+    return this.db.get<User>(`SELECT * FROM users WHERE id = ?`, id);
+  }
 
   getUserById(id: string): Promise<User | undefined> {
     return this.db.get<User>(`SELECT * FROM users WHERE id = ?`, id);
@@ -94,15 +98,21 @@ export class SqlDataStore implements Datastore {
   }
 
   async getLikes(postId: string): Promise<number> {
-    let awaitResult = await this.db.get<number>('Select count(*) FROM Likes WHERE postId=?', postId);
-    let val:number = awaitResult === undefined?0:awaitResult;
+    let awaitResult = await this.db.get<number>(
+      'Select count(*) FROM Likes WHERE postId=?',
+      postId
+    );
+    let val: number = awaitResult === undefined ? 0 : awaitResult;
     return val;
   }
 
   async isDuplicateLike(like: Like): Promise<boolean> {
-    let awaitResult = await this.db.get<number>('SELECT 1 FROM likes WHERE postId=?,userId=?',like.postId,like.userId);
-    let val:boolean = awaitResult === undefined ? false : true;
+    let awaitResult = await this.db.get<number>(
+      'SELECT 1 FROM likes WHERE postId=?,userId=?',
+      like.postId,
+      like.userId
+    );
+    let val: boolean = awaitResult === undefined ? false : true;
     return val;
   }
-  
 }

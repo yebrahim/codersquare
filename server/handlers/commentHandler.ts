@@ -8,13 +8,13 @@ export const createCommentHandler
     :ExpressHandler<CreateCommentRequest,CreateCommentResponse> = async (req,res)=>{
 
     if(!req.body.postId)
-        return res.status(400).send("No Post Id");
+        return res.status(400).send({error:"No Post Id"});
     
     if(!req.body.userId)
-        return res.status(400).send("No User Id");
+        return res.status(400).send({error:"No User Id"});
     
     if(!req.body.comment)
-        return res.status(400).send("No Comment");
+        return res.status(400).send({error:"No Comment"});
 
     const commentForInsertion:Comment = {
         id:crypto.randomUUID(),
@@ -33,7 +33,7 @@ export const deleteCommentHandler: ExpressHandler<DeleteCommentRequest, DeleteCo
     res
   ) => {
     if (!req.body.commentId)
-       return res.status(404).send("No Comment Id");
+       return res.status(404).send({error:"No Comment Id"});
     await db.deleteComment(req.body.commentId);
     return res.sendStatus(200);
   };

@@ -17,6 +17,7 @@ export const listPostsHandler: ExpressHandler<ListPostsRequest, ListPostsRespons
   req,
   res
 ) => {
+  console.log(req.headers.authorization)
   // TODO: add pagination and filtering
   return res.send({ posts: await db.listPosts() });
 };

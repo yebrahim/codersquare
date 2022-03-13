@@ -8,11 +8,11 @@ export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResp
 ) => {
   //TODO:Get Userid from Session
   if (!req.body.postId) {
-    return res.status(400).send('No Post Id');
+    return res.status(400).send({error:'No Post Id'});
   }
 
   if (!req.body.userId) {
-    return res.status(400).send("No User Id")
+    return res.status(400).send({error:"No User Id"})
   }
 
   let found = await db.isDuplicateLike({
@@ -20,7 +20,7 @@ export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResp
     userId:req.body.userId
   });
   if(found){
-    return res.status(400).send('No more likes for same post, same userid');
+    return res.status(400).send({error:'No more likes for same post, same userid'});
   }
 
   //Valid like Object
