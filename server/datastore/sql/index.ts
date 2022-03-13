@@ -41,7 +41,7 @@ export class SqlDataStore implements Datastore {
   }
 
   getUserByUsername(username: string): Promise<User | undefined> {
-    return this.db.get<User>(`SELECT * FROM users WHERE username = ?`, username);
+    return this.db.get<User>(`SELECT * FROM users WHERE userName = ?`, username);
   }
 
   listPosts(): Promise<Post[]> {
@@ -60,8 +60,7 @@ export class SqlDataStore implements Datastore {
   }
 
   async getPost(id: string): Promise<Post | undefined> {
-    // throw new Error('Method not implemented.');
-    return await this.db.get<Post>('SELECT TOP 1 From posts where postId = ?', id);
+    return await this.db.get<Post>('SELECT * FROM posts WHERE postId = ?', id);
   }
 
   async deletePost(id: string): Promise<void> {
@@ -69,12 +68,12 @@ export class SqlDataStore implements Datastore {
   }
 
   async createLike(like: Like): Promise<void> {
-    await this.db.run('INSERT INTO Likes(UserId,PostId) VALUES(?,?)', like.userId, like.postId);
+    await this.db.run('INSERT INTO Likes(userId,postId) VALUES(?,?)', like.userId, like.postId);
   }
 
   async createComment(comment: Comment): Promise<void> {
     await this.db.run(
-      'INSERT INTO Comments(UserId,PostId,Comment,PostedAt) VALUES(?,?)',
+      'INSERT INTO Comments(userId,postId,comment,postedAt) VALUES(?,?,?,?)',
       comment.userId,
       comment.postId,
       comment.comment,
@@ -83,22 +82,22 @@ export class SqlDataStore implements Datastore {
   }
 
   async listComments(postId: string): Promise<Comment[]> {
-    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE PostId=?', postId);
+    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE postId=?', postId);
   }
 
   async deleteComment(id: string): Promise<void> {
-    await this.db.run('Delete From Comments Where Id=?', id);
+    await this.db.run('Delete FROM comments WHERE Id=?', id);
   }
 
   async getLikes(postId: string): Promise<number> {
-    let awaitResult = await this.db.get<number|undefined>('Select count(*) From Likes Where postId=?', postId);
+    let awaitResult = await this.db.get<number>('Select count(*) FROM Likes WHERE postId=?', postId);
     let val:number = awaitResult === undefined?0:awaitResult;
     return val;
   }
 
   async isDuplicateLike(like: Like): Promise<boolean> {
     let awaitResult = await this.db.get<number>('SELECT 1 FROM likes WHERE postId=?,userId=?',like.postId,like.userId);
-    let val:boolean = awaitResult ===undefined?false:true;
+    let val:boolean = awaitResult === undefined ? false : true;
     return val;
   }
   
