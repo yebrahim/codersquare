@@ -2,6 +2,7 @@ import { CreateCommentRequest, CreateCommentResponse, DeleteCommentRequest, Dele
 import { db } from '../datastore';
 import { ExpressHandler, Comment } from '../types';
 import crypto from 'crypto';
+import { getUserId } from '../localStorage';
 
 //Create Comment Handler
 export const createCommentHandler
@@ -10,7 +11,7 @@ export const createCommentHandler
     if(!req.body.postId)
         return res.status(400).send({error:"No Post Id"});
     
-    if(!req.body.userId)
+    if(!getUserId())
         return res.status(400).send({error:"No User Id"});
     
     if(!req.body.comment)
@@ -20,7 +21,7 @@ export const createCommentHandler
         id:crypto.randomUUID(),
         postedAt: Date.now(),
         postId:req.body.postId,
-        userId:req.body.userId,
+        userId:getUserId(),
         comment:req.body.comment
     }
     await db.createComment(commentForInsertion);

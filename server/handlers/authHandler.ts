@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
 import { signJwt } from '../auth';
 import { db } from '../datastore';
+import { saveUserInfo } from '../localStorage';
 import { ExpressHandler, User } from '../types';
 
 export const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
@@ -17,6 +18,8 @@ export const signInHandler: ExpressHandler<SignInRequest, SignInResponse> = asyn
   }
 
   const jwt = signJwt({ userId: existing.id });
+
+  saveUserInfo(existing)
 
   return res.status(200).send({
     user: {
@@ -51,6 +54,9 @@ export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = asyn
     password:hashPassword(password),
   };
   const jwt = signJwt({userId: user.id});
+  //Save to Browser Local Storage
+  saveUserInfo(user);
+
   await db.createUser(user);
   return res.status(200).send({
    jwt
