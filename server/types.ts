@@ -30,6 +30,7 @@ export interface Comment {
   postedAt: number;
 }
 
+//Create generic type and append error prop to the Type T
 type WithError<T> = T & {error: string};
 
 export type ExpressHandler<Req, Res> = RequestHandler<

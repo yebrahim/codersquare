@@ -1,6 +1,6 @@
 import { verifyJwt } from '../auth';
 import { db } from '../datastore';
-import { ExpressHandler } from '../types';
+import { ExpressHandler, User } from '../types';
 
 export const authMiddleware: ExpressHandler<any, any> = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -14,7 +14,7 @@ export const authMiddleware: ExpressHandler<any, any> = async (req, res, next) =
     if (!user) {
       throw 'not found';
     }
-
+    res.locals.userId = user.id;
     next()
   } catch {
     return res.status(400).send({ error: 'Bad token' });

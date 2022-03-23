@@ -11,7 +11,6 @@ import {
   ListPostsResponse,
 } from '../api';
 import { db } from '../datastore';
-import { getUserId } from '../localStorage';
 import { ExpressHandler, Post } from '../types';
 
 export const listPostsHandler: ExpressHandler<ListPostsRequest, ListPostsResponse> = async (
@@ -27,7 +26,7 @@ export const createPostHandler: ExpressHandler<CreatePostRequest, CreatePostResp
   res
 ) => {
   // TODO: better error messages
-  if (!req.body.title || !req.body.url || !getUserId()) {
+  if (!req.body.title || !req.body.url || res.locals.userId) {
     return res.sendStatus(400);
   }
   // TODO: validate title and url are non-empty
@@ -37,7 +36,7 @@ export const createPostHandler: ExpressHandler<CreatePostRequest, CreatePostResp
     postedAt: Date.now(),
     title: req.body.title,
     url: req.body.url,
-    userId: getUserId(),
+    userId: res.locals.userId,
   };
   await db.createPost(post);
   return res.sendStatus(200);

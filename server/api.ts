@@ -7,7 +7,7 @@ export interface ListPostsResponse {
 }
 export type DeletePostRequest = { postId: string };
 export type DeletePostResponse = {};
-export type CreatePostRequest = Pick<Post, 'title' | 'url' | 'userId'>;
+export type CreatePostRequest = Pick<Post, 'title' | 'url'>;
 export interface CreatePostResponse {}
 export type GetPostRequest = {postId:string}
 export interface GetPostResponse {
@@ -15,7 +15,7 @@ export interface GetPostResponse {
 }
 
 // Comment APIs
-export type CreateCommentRequest = Pick<Comment, 'userId' | 'postId' | 'comment'>;
+export type CreateCommentRequest = Pick<Comment,'postId' | 'comment'>;
 export interface CreateCommentResponse {}
 export type GetCommentsRequest = { postId: string };
 export interface GetCommentsResponse {

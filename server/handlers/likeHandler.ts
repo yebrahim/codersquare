@@ -1,6 +1,5 @@
 import { CreateLikeRequest, CreateLikeResponse, GetLikesRequest, GetLikesResponse,  } from '../api';
 import { db } from '../datastore';
-import { getUserId } from '../localStorage';
 import { ExpressHandler, Like } from '../types';
 
 export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResponse> = async(
@@ -12,13 +11,13 @@ export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResp
     return res.status(400).send({error:'No Post Id'});
   }
 
-  if (!getUserId()) {
+  if (!res.locals.userId) {
     return res.status(400).send({error:"No User Id"})
   }
 
   let found = await db.isDuplicateLike({
     postId: req.body.postId,
-    userId:getUserId()
+    userId:res.locals.userId
   });
   if(found){
     return res.status(400).send({error:'No more likes for same post, same userid'});
@@ -27,7 +26,7 @@ export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResp
   //Valid like Object
   const likeForInsert: Like = {
     postId: req.body.postId,
-    userId: getUserId(),
+    userId: res.locals.userId
   };
 
   db.createLike(likeForInsert);
