@@ -11,7 +11,6 @@ import {
   ListPostsResponse,
 } from '../api';
 import { db } from '../datastore';
-import { getUserId } from '../localStorage';
 import { ExpressHandler, Post } from '../types';
 
 export const listPostsHandler: ExpressHandler<ListPostsRequest, ListPostsResponse> = async (

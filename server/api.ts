@@ -16,7 +16,7 @@ export interface GetPostResponse {
 }
 
 // Comment APIs
-export type CreateCommentRequest = Pick<Comment, 'userId' | 'postId' | 'comment'>;
+export type CreateCommentRequest = Pick<Comment, 'postId' | 'comment'>;
 export interface CreateCommentResponse {}
 export type GetCommentsRequest = { postId: string };
 export interface GetCommentsResponse {

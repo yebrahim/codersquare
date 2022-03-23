@@ -1,8 +1,7 @@
-import { CreateCommentRequest, CreateCommentResponse, DeleteCommentRequest, DeleteCommentResponse } from '../api';
+import { CreateCommentRequest, CreateCommentResponse, DeleteCommentRequest, DeleteCommentResponse, GetCommentsRequest, GetCommentsResponse } from '../api';
 import { db } from '../datastore';
 import { ExpressHandler, Comment } from '../types';
 import crypto from 'crypto';
-import { getUserId } from '../localStorage';
 
 //Create Comment Handler
 export const createCommentHandler
@@ -11,7 +10,7 @@ export const createCommentHandler
     if(!req.body.postId)
         return res.status(400).send({error:"No Post Id"});
     
-    if(!getUserId())
+    if(!res.locals.userId)
         return res.status(400).send({error:"No User Id"});
     
     if(!req.body.comment)
@@ -21,7 +20,7 @@ export const createCommentHandler
         id:crypto.randomUUID(),
         postedAt: Date.now(),
         postId:req.body.postId,
-        userId:getUserId(),
+        userId:res.locals.userId,
         comment:req.body.comment
     }
     await db.createComment(commentForInsertion);
@@ -38,6 +37,13 @@ export const deleteCommentHandler: ExpressHandler<DeleteCommentRequest, DeleteCo
     await db.deleteComment(req.body.commentId);
     return res.sendStatus(200);
   };
-  
 
-
+//Get Post Comments
+export const getCommentsHandler: ExpressHandler<GetCommentsRequest,GetCommentsResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.body.postId)
+       return res.status(404).send({error:"No Post Id"});
+     await db.listComments(req.body.postId);
+  };
