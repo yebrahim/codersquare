@@ -35,10 +35,6 @@ export class SqlDataStore implements Datastore {
       user.username
     );
   }
-  
-  getUserById(id: string): Promise<User | undefined> {
-    return this.db.get<User>(`SELECT * FROM users WHERE id = ?`, id);
-  }
 
   getUserById(id: string): Promise<User | undefined> {
     return this.db.get<User>(`SELECT * FROM users WHERE id = ?`, id);
