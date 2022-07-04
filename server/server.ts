@@ -23,6 +23,7 @@ export async function createServer(dbPath: string, logRequests = true) {
 
   // create express app
   const app = express();
+  app.use(cors());
 
   // middlewares for parsing JSON payloads and opening up cors policy
   app.use(express.json());
