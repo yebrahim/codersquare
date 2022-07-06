@@ -1,3 +1,4 @@
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { listAllPosts } from '../client';
 
@@ -12,23 +13,27 @@ export const LandingPage = () => {
   }
 
   return (
-    <div style={{ padding: 10, maxWidth: 800, margin: 'auto' }}>
-      <div style={{ display: 'flex', backgroundColor: 'lightblue', padding: 2 }}>
-        <h3 style={{ margin: 3, border: '1px solid white', paddingLeft: 3, paddingRight: 3 }}>
+    <Box padding={5} maxWidth="5xl" margin="auto">
+      <Flex backgroundColor="lightblue" padding={1} fontWeight="bold">
+        <Text margin={1} border="1px" paddingX={1}>
           CS
-        </h3>
-        <h3 style={{ margin: 3 }}>CoderSquare</h3>
-      </div>
-      <div style={{ maxWidth: 800, margin: 'auto' }}>
+        </Text>
+        <Text marginY={1} border="1px" borderColor="transparent">
+          CoderSquare
+        </Text>
+      </Flex>
+      <Box>
         <br />
         {data.posts.map((p: any, i: number) => (
-          <div key={i}>
-            <h3 style={{ marginTop: 3, marginBottom: 3 }}>{p.title}</h3>
-            <div>{p.url}</div>
+          <Flex key={i} align="center" gap={2}>
+            <Text marginY={1} fontWeight="bold">
+              {p.title}
+            </Text>
+            <Text fontSize="sm">{p.url}</Text>
             <hr />
-          </div>
+          </Flex>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
