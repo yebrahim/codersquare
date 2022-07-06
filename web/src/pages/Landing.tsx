@@ -7,7 +7,7 @@ export const LandingPage = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (isError) {
+  if (isError || !data) {
     return <div>Error happened while loading posts.</div>;
   }
 
