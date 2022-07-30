@@ -16,6 +16,8 @@ jobs:
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
+          ENV: ${{ secrets.ENV }}
+          PORT: ${{ secrets.PORT }}
         run: |
           cd server
           npm install
