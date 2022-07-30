@@ -13,7 +13,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - name: Deploy and restart web server
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
         run: |
           cd server
           npm install
-          PORT=3000 JWT_SECRET=12345 PASSWORD_SALT=mysecretsalt ENV=production npm run start:prod
+          npm run start:prod
