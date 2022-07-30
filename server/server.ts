@@ -55,5 +55,8 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
 
   app.use(errHandler);
 
-  app.listen(3000);
+  const port = process.env.PORT;
+  const env = process.env.ENV;
+
+  app.listen(port, () => console.log(`Listening on port ${port} on ${env} environment`));
 })();

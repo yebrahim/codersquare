@@ -1,4 +1,4 @@
-CREATE Table comments (
+CREATE Table IF NOT EXISTS comments (
   id      VARCHAR PRIMARY KEY,
   userId  VARCHAR NOT NULL,
   postId  VARCHAR NOT NULL,
@@ -8,7 +8,7 @@ CREATE Table comments (
   FOREIGN KEY (PostId) REFERENCES posts (id)
 );
 
-CREATE Table likes (
+CREATE Table IF NOT EXISTS likes (
   userId  VARCHAR NOT NULL,
   postId  VARCHAR NOT NULL,
   FOREIGN KEY (userId) REFERENCES users (id),
