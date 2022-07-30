@@ -49,6 +49,7 @@ export const signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = asyn
     username,
     password: hashPassword(password),
   };
+
   await db.createUser(user);
   const jwt = signJwt({ userId: user.id });
   return res.status(200).send({
