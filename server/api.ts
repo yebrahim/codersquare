@@ -10,7 +10,6 @@ export type CreatePostRequest = Pick<Post, 'title' | 'url'>;
 export type DeletePostRequest = { postId: string };
 export type DeletePostResponse = {};
 export interface CreatePostResponse {}
-export type GetPostRequest = { postId: string };
 export interface GetPostResponse {
   post: Post;
 }
@@ -18,18 +17,18 @@ export interface GetPostResponse {
 // Comment APIs
 export type CreateCommentRequest = Pick<Comment, 'postId' | 'comment'>;
 export interface CreateCommentResponse {}
-export type GetCommentsRequest = { postId: string };
-export interface GetCommentsResponse {
+
+export interface ListCommentsResponse {
   comments: Comment[];
 }
+
 export type DeleteCommentRequest = { commentId: string };
 export type DeleteCommentResponse = {};
 
 // Like APIs
-export type CreateLikeRequest = Like;
 export interface CreateLikeResponse {}
-export type GetLikesRequest = { postId: string };
-export interface GetLikesResponse {
+
+export interface ListLikesResponse {
   likes: Number;
 }
 

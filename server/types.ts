@@ -40,6 +40,13 @@ export type ExpressHandler<Req, Res> = RequestHandler<
   any
 >;
 
+export type ExpressHandlerWithParams<Params, Req, Res> = RequestHandler<
+  Partial<Params>,
+  Partial<WithError<Res>>,
+  Partial<Req>,
+  any
+>;
+
 export interface JwtObject {
   userId: string;
 }

@@ -1,28 +1,18 @@
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
 import fs from 'fs';
 import https from 'https';
 
-import { initDb } from './datastore';
+import { db, initDb } from './datastore';
 import { ENDPOINT_CONFIGS, Endpoints } from './endpoints';
-import { signInHandler, signUpHandler } from './handlers/authHandler';
-import {
-  createCommentHandler,
-  deleteCommentHandler,
-  getCommentsHandler,
-} from './handlers/commentHandler';
-import { createLikeHandler, getLikesHandler } from './handlers/likeHandler';
-import {
-  createPostHandler,
-  deletePostHandler,
-  getPostHandler,
-  listPostsHandler,
-} from './handlers/postHandler';
+import { AuthHandler } from './handlers/authHandler';
+import { CommentHandler } from './handlers/commentHandler';
+import { LikeHandler } from './handlers/likeHandler';
+import { PostHandler } from './handlers/postHandler';
 import { authMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
-import { ExpressHandler } from './types';
 
 (async () => {
   await initDb();
@@ -38,22 +28,27 @@ import { ExpressHandler } from './types';
   //Log incoming Requests
   app.use(loggerMiddleware);
 
+  const authHandler = new AuthHandler(db);
+  const postHandler = new PostHandler(db);
+  const likeHandler = new LikeHandler(db);
+  const commentHandler = new CommentHandler(db);
+
   // Map of enpoints handlers
-  const HANDLERS: { [key in Endpoints]: ExpressHandler<any, any> } = {
-    [Endpoints.signin]: signInHandler,
-    [Endpoints.signup]: signUpHandler,
+  const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
+    [Endpoints.signin]: authHandler.signInHandler,
+    [Endpoints.signup]: authHandler.signUpHandler,
 
-    [Endpoints.listPosts]: listPostsHandler,
-    [Endpoints.getPost]: getPostHandler,
-    [Endpoints.createPost]: createPostHandler,
-    [Endpoints.deletePost]: deletePostHandler,
+    [Endpoints.listPosts]: postHandler.listPostsHandler,
+    [Endpoints.getPost]: postHandler.getPostHandler,
+    [Endpoints.createPost]: postHandler.createPostHandler,
+    [Endpoints.deletePost]: postHandler.deletePostHandler,
 
-    [Endpoints.getLikes]: getLikesHandler,
-    [Endpoints.createLike]: createLikeHandler,
+    [Endpoints.listLikes]: likeHandler.listLikesHandler,
+    [Endpoints.createLike]: likeHandler.createLikeHandler,
 
-    [Endpoints.getComments]: getCommentsHandler,
-    [Endpoints.createComment]: createCommentHandler,
-    [Endpoints.deleteComment]: deleteCommentHandler,
+    [Endpoints.listComments]: commentHandler.listCommentsHandler,
+    [Endpoints.createComment]: commentHandler.createCommentHandler,
+    [Endpoints.deleteComment]: commentHandler.deleteCommentHandler,
   };
 
   // Register handlers in express

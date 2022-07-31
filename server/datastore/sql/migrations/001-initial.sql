@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  id        VARCHAR PRIMARY KEY,
+  id        VARCHAR NOT NULL PRIMARY KEY,
   firstName VARCHAR NOT NULL,
   lastName  VARCHAR NOT NULL,
   userName  VARCHAR UNIQUE NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE posts (
-  id       VARCHAR PRIMARY KEY,
+  id       VARCHAR NOT NULL PRIMARY KEY,
   title    VARCHAR NOT NULL,
   url      VARCHAR UNIQUE NOT NULL,
   userId   VARCHAR NOT NULL,

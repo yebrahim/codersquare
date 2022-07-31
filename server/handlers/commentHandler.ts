@@ -5,47 +5,59 @@ import {
   CreateCommentResponse,
   DeleteCommentRequest,
   DeleteCommentResponse,
-  GetCommentsRequest,
-  GetCommentsResponse,
+  ListCommentsResponse,
 } from '../api';
-import { db } from '../datastore';
-import { Comment, ExpressHandler } from '../types';
+import { Datastore } from '../datastore';
+import { Comment, ExpressHandler, ExpressHandlerWithParams } from '../types';
 
-//Create Comment Handler
-export const createCommentHandler: ExpressHandler<
-  CreateCommentRequest,
-  CreateCommentResponse
-> = async (req, res) => {
-  if (!req.body.postId) return res.status(400).send({ error: 'No Post Id' });
+export class CommentHandler {
+  private db: Datastore;
 
-  if (!req.body.comment) return res.status(400).send({ error: 'No Comment' });
+  constructor(db: Datastore) {
+    this.db = db;
+  }
 
-  const commentForInsertion: Comment = {
-    id: crypto.randomUUID(),
-    postedAt: Date.now(),
-    postId: req.body.postId,
-    userId: res.locals.userId,
-    comment: req.body.comment,
+  public createCommentHandler: ExpressHandlerWithParams<
+    { postId: string },
+    CreateCommentRequest,
+    CreateCommentResponse
+  > = async (req, res) => {
+    if (!req.params.postId) return res.status(400).send({ error: 'Post ID is missing' });
+    if (!req.body.comment) return res.status(400).send({ error: 'Comment is missing' });
+
+    if (!(await this.db.getPost(req.params.postId))) {
+      return res.status(404).send({ error: 'No post found with this ID' });
+    }
+
+    const commentForInsertion: Comment = {
+      id: crypto.randomUUID(),
+      postedAt: Date.now(),
+      postId: req.params.postId,
+      userId: res.locals.userId,
+      comment: req.body.comment,
+    };
+    await this.db.createComment(commentForInsertion);
+    return res.sendStatus(200);
   };
-  await db.createComment(commentForInsertion);
-  return res.sendStatus(200);
-};
 
-//Delete Comment Handler
-export const deleteCommentHandler: ExpressHandler<
-  DeleteCommentRequest,
-  DeleteCommentResponse
-> = async (req, res) => {
-  if (!req.body.commentId) return res.status(404).send({ error: 'No Comment Id' });
-  await db.deleteComment(req.body.commentId);
-  return res.sendStatus(200);
-};
+  public deleteCommentHandler: ExpressHandler<DeleteCommentRequest, DeleteCommentResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.body.commentId) return res.status(404).send({ error: 'No Comment Id' });
+    await this.db.deleteComment(req.body.commentId);
+    return res.sendStatus(200);
+  };
 
-//Get Post Comments
-export const getCommentsHandler: ExpressHandler<GetCommentsRequest, GetCommentsResponse> = async (
-  req,
-  res
-) => {
-  if (!req.body.postId) return res.status(404).send({ error: 'No Post Id' });
-  await db.listComments(req.body.postId);
-};
+  public listCommentsHandler: ExpressHandlerWithParams<
+    { postId: string },
+    null,
+    ListCommentsResponse
+  > = async (req, res) => {
+    if (!req.params.postId) {
+      return res.status(400).send({ error: 'Post ID missing' });
+    }
+    const comments = await this.db.listComments(req.params.postId);
+    return res.send({ comments });
+  };
+}

@@ -1,4 +1,4 @@
-export type EndpointConfig = { url: string; method: 'get' | 'post'; auth?: boolean };
+export type EndpointConfig = { url: string; method: 'get' | 'post' | 'delete'; auth?: boolean };
 
 export enum Endpoints {
   signin = 'signin',
@@ -9,10 +9,10 @@ export enum Endpoints {
   createPost = 'createPost',
   deletePost = 'deletePost',
 
-  getLikes = 'getLikes',
+  listLikes = 'listLikes',
   createLike = 'createLike',
 
-  getComments = 'getComments',
+  listComments = 'listComments',
   createComment = 'createComment',
   deleteComment = 'deleteComment',
 }
@@ -26,10 +26,10 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   [Endpoints.createPost]: { method: 'post', url: '/posts', auth: true },
   [Endpoints.deletePost]: { method: 'post', url: '/posts/:id', auth: true },
 
-  [Endpoints.getLikes]: { method: 'get', url: '/likes/:postId' },
-  [Endpoints.createLike]: { method: 'post', url: '/likes', auth: true },
+  [Endpoints.listLikes]: { method: 'get', url: '/likes/:postId' },
+  [Endpoints.createLike]: { method: 'post', url: '/likes/:postId', auth: true },
 
-  [Endpoints.getComments]: { method: 'get', url: '/comments/:postId' },
-  [Endpoints.createComment]: { method: 'post', url: '/comments', auth: true },
-  [Endpoints.deleteComment]: { method: 'post', url: '/comments/:id', auth: true },
+  [Endpoints.listComments]: { method: 'get', url: '/comments/:postId' },
+  [Endpoints.createComment]: { method: 'post', url: '/comments/:postId', auth: true },
+  [Endpoints.deleteComment]: { method: 'delete', url: '/comments/:postId', auth: true },
 };

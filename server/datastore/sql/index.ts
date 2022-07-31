@@ -64,20 +64,21 @@ export class SqlDataStore implements Datastore {
   }
 
   async getPost(id: string): Promise<Post | undefined> {
-    return await this.db.get<Post>('SELECT * FROM posts WHERE postId = ?', id);
+    return await this.db.get<Post>('SELECT * FROM posts WHERE id = ?', id);
   }
 
   async deletePost(id: string): Promise<void> {
-    await this.db.run('Delete FROM posts WHERE id=?', id);
+    await this.db.run('Delete FROM posts WHERE id = ?', id);
   }
 
   async createLike(like: Like): Promise<void> {
-    await this.db.run('INSERT INTO Likes(userId,postId) VALUES(?,?)', like.userId, like.postId);
+    await this.db.run('INSERT INTO likes(userId, postId) VALUES(?,?)', like.userId, like.postId);
   }
 
   async createComment(comment: Comment): Promise<void> {
     await this.db.run(
-      'INSERT INTO Comments(userId,postId,comment,postedAt) VALUES(?,?,?,?)',
+      'INSERT INTO Comments(id, userId, postId, comment, postedAt) VALUES(?,?,?,?,?)',
+      comment.id,
       comment.userId,
       comment.postId,
       comment.comment,
@@ -86,25 +87,24 @@ export class SqlDataStore implements Datastore {
   }
 
   async listComments(postId: string): Promise<Comment[]> {
-    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE postId=?', postId);
+    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE postId = ?', postId);
   }
 
   async deleteComment(id: string): Promise<void> {
-    await this.db.run('Delete FROM comments WHERE Id=?', id);
+    await this.db.run('DELETE FROM comments WHERE id = ?', id);
   }
 
   async getLikes(postId: string): Promise<number> {
-    let awaitResult = await this.db.get<number>(
-      'Select count(*) FROM Likes WHERE postId=?',
+    let result = await this.db.get<{ count: number }>(
+      'SELECT COUNT(*) as count FROM likes WHERE postId = ?',
       postId
     );
-    let val: number = awaitResult === undefined ? 0 : awaitResult;
-    return val;
+    return result?.count ?? 0;
   }
 
-  async isDuplicateLike(like: Like): Promise<boolean> {
+  async exists(like: Like): Promise<boolean> {
     let awaitResult = await this.db.get<number>(
-      'SELECT 1 FROM likes WHERE postId=?,userId=?',
+      'SELECT 1 FROM likes WHERE postId = ? and userId = ?',
       like.postId,
       like.userId
     );

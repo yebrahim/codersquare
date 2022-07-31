@@ -1,39 +1,46 @@
-import { CreateLikeRequest, CreateLikeResponse, GetLikesRequest, GetLikesResponse } from '../api';
-import { db } from '../datastore';
-import { ExpressHandler, Like } from '../types';
+import { CreateLikeResponse, ListLikesResponse } from '../api';
+import { Datastore } from '../datastore';
+import { ExpressHandlerWithParams, Like } from '../types';
 
-export const createLikeHandler: ExpressHandler<CreateLikeRequest, CreateLikeResponse> = async (
-  req,
-  res
-) => {
-  //TODO:Get Userid from Session
-  if (!req.body.postId) {
-    return res.status(400).send({ error: 'No Post Id' });
+export class LikeHandler {
+  private db: Datastore;
+
+  constructor(db: Datastore) {
+    this.db = db;
   }
 
-  let found = await db.isDuplicateLike({
-    postId: req.body.postId,
-    userId: res.locals.userId,
-  });
-  if (found) {
-    return res.status(400).send({ error: 'No more likes for same post, same userid' });
-  }
+  public createLikeHandler: ExpressHandlerWithParams<{ postId: string }, null, CreateLikeResponse> =
+    async (req, res) => {
+      if (!req.params.postId) {
+        return res.status(400).send({ error: 'Post ID missing' });
+      }
+      if (!(await this.db.getPost(req.params.postId))) {
+        return res.status(404).send({ error: 'No post found with this ID' });
+      }
 
-  //Valid like Object
-  const likeForInsert: Like = {
-    postId: req.body.postId,
-    userId: res.locals.userId,
-  };
+      let found = await this.db.exists({
+        postId: req.params.postId,
+        userId: res.locals.userId,
+      });
+      if (found) {
+        return res.status(400).send({ error: 'No more likes for same post, same userid' });
+      }
 
-  db.createLike(likeForInsert);
-  return res.sendStatus(200);
-};
+      const likeForInsert: Like = {
+        postId: req.params.postId,
+        userId: res.locals.userId,
+      };
 
-export const getLikesHandler: ExpressHandler<GetLikesRequest, GetLikesResponse> = async (
-  request,
-  response
-) => {
-  let params: any = request.params;
-  const count: Number = await db.getLikes(params.postId);
-  return response.send({ likes: count });
-};
+      this.db.createLike(likeForInsert);
+      return res.sendStatus(200);
+    };
+
+  public listLikesHandler: ExpressHandlerWithParams<{ postId: string }, null, ListLikesResponse> =
+    async (req, res) => {
+      if (!req.params.postId) {
+        return res.status(400).send({ error: 'Post ID missing' });
+      }
+      const count: Number = await this.db.getLikes(req.params.postId);
+      return res.send({ likes: count });
+    };
+}
