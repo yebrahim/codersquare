@@ -5,6 +5,7 @@ import fs from 'fs';
 import https from 'https';
 
 import { initDb } from './datastore';
+import { ENDPOINT_CONFIGS, Endpoints } from './endpoints';
 import { signInHandler, signUpHandler } from './handlers/authHandler';
 import {
   createCommentHandler,
@@ -21,6 +22,7 @@ import {
 import { authMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
+import { ExpressHandler } from './types';
 
 (async () => {
   await initDb();
@@ -36,39 +38,49 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
   //Log incoming Requests
   app.use(loggerMiddleware);
 
-  //Public endpoints
-  app.get('/healthz', (_, res) => res.send({ status: 'OK' }));
-  app.post('/v1/signup', asyncHandler(signUpHandler));
-  app.post('/v1/signin', asyncHandler(signInHandler));
+  // Map of enpoints handlers
+  const HANDLERS: { [key in Endpoints]: ExpressHandler<any, any> } = {
+    [Endpoints.signin]: signInHandler,
+    [Endpoints.signup]: signUpHandler,
 
-  app.use(authMiddleware);
+    [Endpoints.listPosts]: listPostsHandler,
+    [Endpoints.getPost]: getPostHandler,
+    [Endpoints.createPost]: createPostHandler,
+    [Endpoints.deletePost]: deletePostHandler,
 
-  //Private endpoints
-  app.get('/v1/posts', asyncHandler(listPostsHandler));
-  app.post('/v1/posts', asyncHandler(createPostHandler));
-  app.delete('/v1/posts/:id', asyncHandler(deletePostHandler));
-  app.get('/v1/posts/:id', asyncHandler(getPostHandler));
+    [Endpoints.getLikes]: getLikesHandler,
+    [Endpoints.createLike]: createLikeHandler,
 
-  app.post('/v1/likes/new', asyncHandler(createLikeHandler));
-  app.get('/v1/likes/:postId', asyncHandler(getLikesHandler));
+    [Endpoints.getComments]: getCommentsHandler,
+    [Endpoints.createComment]: createCommentHandler,
+    [Endpoints.deleteComment]: deleteCommentHandler,
+  };
 
-  app.post('/v1/comments/new', asyncHandler(createCommentHandler));
-  app.get('/v1/comments/:postId', asyncHandler(getCommentsHandler));
-  app.delete('/v1/comments/:id', asyncHandler(deleteCommentHandler));
+  // Register handlers in express
+  Object.keys(Endpoints).forEach(entry => {
+    const config = ENDPOINT_CONFIGS[entry as Endpoints];
+    const handler = HANDLERS[entry as Endpoints];
+    const url = '/api/v1' + config.url;
+
+    config.auth
+      ? app[config.method](url, authMiddleware, asyncHandler(handler))
+      : app[config.method](url, asyncHandler(handler));
+  });
+
+  app.get('/healthz', (_, res) => res.send({ status: 'ok!' }));
 
   app.use(errHandler);
 
-  const port = process.env.PORT;
-  const env = process.env.ENV;
+  // Start server, https in production, otherwise http.
+  const { ENV, PORT } = process.env;
+  const listener = () => console.log(`Listening on port ${PORT} in ${ENV} environment`);
 
-  const listener = () => console.log(`Listening on port ${port} on ${env} environment`);
-
-  if (env === 'production') {
+  if (ENV === 'production') {
     const key = fs.readFileSync('/home/codersquare-user/certs/privkey1.pem', 'utf-8');
     const cert = fs.readFileSync('/home/codersquare-user/certs/cert1.pem', 'utf-8');
 
-    https.createServer({ key, cert }, app).listen(port, listener);
+    https.createServer({ key, cert }, app).listen(PORT, listener);
   } else {
-    app.listen(port, listener);
+    app.listen(PORT, listener);
   }
 })();
