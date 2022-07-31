@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import asyncHandler from 'express-async-handler';
+import fs from 'fs';
+import https from 'https';
 
 import { initDb } from './datastore';
 import { signInHandler, signUpHandler } from './handlers/authHandler';
@@ -59,5 +61,14 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
   const port = process.env.PORT;
   const env = process.env.ENV;
 
-  app.listen(port, () => console.log(`Listening on port ${port} on ${env} environment`));
+  const listener = () => console.log(`Listening on port ${port} on ${env} environment`);
+
+  if (env === 'production') {
+    const key = fs.readFileSync('/home/codersquare-user/certs/privkey1.pem', 'utf-8');
+    const cert = fs.readFileSync('/home/codersquare-user/certs/cert1.pem', 'utf-8');
+
+    https.createServer({ key, cert }, app).listen(port, listener);
+  } else {
+    app.listen(port, listener);
+  }
 })();
