@@ -3,12 +3,11 @@ import crypto from 'crypto';
 import {
   CreateCommentRequest,
   CreateCommentResponse,
-  DeleteCommentRequest,
   DeleteCommentResponse,
   ListCommentsResponse,
 } from '../api';
 import { Datastore } from '../datastore';
-import { Comment, ExpressHandler, ExpressHandlerWithParams } from '../types';
+import { Comment, ExpressHandlerWithParams } from '../types';
 
 export class CommentHandler {
   private db: Datastore;
@@ -40,12 +39,13 @@ export class CommentHandler {
     return res.sendStatus(200);
   };
 
-  public deleteCommentHandler: ExpressHandler<DeleteCommentRequest, DeleteCommentResponse> = async (
-    req,
-    res
-  ) => {
-    if (!req.body.commentId) return res.status(404).send({ error: 'No Comment Id' });
-    await this.db.deleteComment(req.body.commentId);
+  public deleteCommentHandler: ExpressHandlerWithParams<
+    { id: string },
+    null,
+    DeleteCommentResponse
+  > = async (req, res) => {
+    if (!req.params.id) return res.status(404).send({ error: 'No Comment Id' });
+    await this.db.deleteComment(req.params.id);
     return res.sendStatus(200);
   };
 

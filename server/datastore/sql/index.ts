@@ -8,10 +8,10 @@ import { Comment, Like, Post, User } from '../../types';
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
 
-  public async openDb() {
+  public async openDb(dbPath: string) {
     // open the database
     this.db = await sqliteOpen({
-      filename: path.join(__dirname, 'codersquare.sqlite'),
+      filename: dbPath,
       driver: sqlite3.Database,
     });
 

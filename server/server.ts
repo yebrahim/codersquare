@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
 import fs from 'fs';
+import http from 'http';
 import https from 'https';
 
 import { db, initDb } from './datastore';
@@ -14,8 +15,8 @@ import { authMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
 
-(async () => {
-  await initDb();
+export async function createServer(dbPath: string, logRequests = true) {
+  await initDb(dbPath);
   //Read .env file
   dotenv.config();
 
@@ -25,8 +26,10 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
   //It parses incoming requests with JSON payloads and is based on body-parser.
   app.use(express.json());
 
-  //Log incoming Requests
-  app.use(loggerMiddleware);
+  if (logRequests) {
+    //Log incoming Requests
+    app.use(loggerMiddleware);
+  }
 
   const authHandler = new AuthHandler(db);
   const postHandler = new PostHandler(db);
@@ -55,11 +58,10 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
   Object.keys(Endpoints).forEach(entry => {
     const config = ENDPOINT_CONFIGS[entry as Endpoints];
     const handler = HANDLERS[entry as Endpoints];
-    const url = '/api/v1' + config.url;
 
     config.auth
-      ? app[config.method](url, authMiddleware, asyncHandler(handler))
-      : app[config.method](url, asyncHandler(handler));
+      ? app[config.method](config.url, authMiddleware, asyncHandler(handler))
+      : app[config.method](config.url, asyncHandler(handler));
   });
 
   app.get('/healthz', (_, res) => res.send({ status: 'ok!' }));
@@ -67,15 +69,14 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
   app.use(errHandler);
 
   // Start server, https in production, otherwise http.
-  const { ENV, PORT } = process.env;
-  const listener = () => console.log(`Listening on port ${PORT} in ${ENV} environment`);
+  const { ENV } = process.env;
 
   if (ENV === 'production') {
     const key = fs.readFileSync('/home/codersquare-user/certs/privkey1.pem', 'utf-8');
     const cert = fs.readFileSync('/home/codersquare-user/certs/cert1.pem', 'utf-8');
 
-    https.createServer({ key, cert }, app).listen(PORT, listener);
+    return https.createServer({ key, cert }, app);
   } else {
-    app.listen(PORT, listener);
+    return http.createServer(app);
   }
-})();
+}
