@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
 import { signJwt } from '../auth';
-import { Datastore, db } from '../datastore';
+import { Datastore } from '../datastore';
 import { ExpressHandler, User } from '../types';
 
 export class AuthHandler {
