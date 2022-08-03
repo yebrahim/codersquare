@@ -1,9 +1,10 @@
+import { User } from '@codersquare/shared';
 import crypto from 'crypto';
 
 import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
 import { signJwt } from '../auth';
 import { Datastore } from '../datastore';
-import { ExpressHandler, User } from '../types';
+import { ExpressHandler } from '../types';
 
 export class AuthHandler {
   private db: Datastore;

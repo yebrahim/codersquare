@@ -1,3 +1,4 @@
+import { Post } from '@codersquare/shared';
 import crypto from 'crypto';
 
 import {
@@ -10,7 +11,7 @@ import {
   ListPostsResponse,
 } from '../api';
 import { Datastore } from '../datastore';
-import { ExpressHandler, ExpressHandlerWithParams, Post } from '../types';
+import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 
 export class PostHandler {
   private db: Datastore;

@@ -1,9 +1,9 @@
+import { Comment, Like, Post, User } from '@codersquare/shared';
 import path from 'path';
 import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
 import { Datastore } from '..';
-import { Comment, Like, Post, User } from '../../types';
 
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;

@@ -1,6 +1,8 @@
+import { Like } from '@codersquare/shared';
+
 import { CreateLikeResponse, ListLikesResponse } from '../api';
 import { Datastore } from '../datastore';
-import { ExpressHandlerWithParams, Like } from '../types';
+import { ExpressHandlerWithParams } from '../types';
 
 export class LikeHandler {
   private db: Datastore;

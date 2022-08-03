@@ -2,11 +2,16 @@
   "name": "codersquare",
   "description": "A social web app for sharing learning resources in a hackernews-style experience.",
   "scripts": {
-    "start": "npm-run-all --parallel start:server start:web",
     "build:server": "cd server && npm i && npm run build",
-    "start:server": "cd server && npm start"
+    "build:shared": "cd shared && npm i && npm run build",
+    "build": "npm-run-all --parallel build:shared build:server",
+    "lint": "prettier . --write",
+    "start:server": "cd server && npm start",
+    "start": "npm-run-all --parallel start:server"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1"
   }
 }

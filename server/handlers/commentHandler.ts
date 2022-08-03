@@ -1,3 +1,4 @@
+import { Comment } from '@codersquare/shared';
 import crypto from 'crypto';
 
 import {
@@ -7,7 +8,7 @@ import {
   ListCommentsResponse,
 } from '../api';
 import { Datastore } from '../datastore';
-import { Comment, ExpressHandlerWithParams } from '../types';
+import { ExpressHandlerWithParams } from '../types';
 
 export class CommentHandler {
   private db: Datastore;

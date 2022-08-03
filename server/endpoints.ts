@@ -1,6 +1,8 @@
 export type EndpointConfig = { url: string; method: 'get' | 'post' | 'delete'; auth?: boolean };
 
 export enum Endpoints {
+  healthz = 'healthz',
+
   signin = 'signin',
   signup = 'signup',
 
@@ -18,6 +20,8 @@ export enum Endpoints {
 }
 
 export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
+  [Endpoints.healthz]: { method: 'get', url: '/api/v1/healthz' },
+
   [Endpoints.signin]: { method: 'post', url: '/api/v1/signin' },
   [Endpoints.signup]: { method: 'post', url: '/api/v1/signup' },
 

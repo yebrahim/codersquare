@@ -38,8 +38,10 @@ export async function createServer(dbPath: string, logRequests = true) {
   const likeHandler = new LikeHandler(db);
   const commentHandler = new CommentHandler(db);
 
-  // Map of enpoints handlers
+  // Map of endpoints handlers
   const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
+    [Endpoints.healthz]: (_, res) => res.send({ status: 'ok!' }),
+
     [Endpoints.signin]: authHandler.signInHandler,
     [Endpoints.signup]: authHandler.signUpHandler,
 
@@ -65,8 +67,6 @@ export async function createServer(dbPath: string, logRequests = true) {
       ? app[config.method](config.url, authMiddleware, asyncHandler(handler))
       : app[config.method](config.url, asyncHandler(handler));
   });
-
-  app.get('/healthz', (_, res) => res.send({ status: 'ok!' }));
 
   app.use(errHandler);
 

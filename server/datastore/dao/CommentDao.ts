@@ -1,4 +1,4 @@
-import { Comment } from '../../types';
+import { Comment } from '@codersquare/shared';
 
 export interface CommentDao {
   createComment(comment: Comment): Promise<void>;

@@ -2,7 +2,7 @@ name: Droplet deployer
 
 on:
   push:
-    branches: [ deploy-prod ]
+    branches: [deploy-prod]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
