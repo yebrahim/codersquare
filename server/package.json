@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "lint": "prettier . --write",
-    "start": "nodemon server.ts",
-    "start:prod": "pm2 delete codersquare; pm2 start --name codersquare \"npx ts-node --transpile-only server.ts\""
+    "build": "npm i && tsc",
+    "start": "nodemon index.ts",
+    "start:prod": "pm2 delete codersquare; pm2 start --name codersquare \"npx ts-node --transpile-only index.ts\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "express-async-handler": "^1.2.0",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.8",
     "nodemon": "^2.0.15",

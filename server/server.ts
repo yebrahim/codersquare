@@ -1,3 +1,4 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
@@ -17,14 +18,15 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
 
 export async function createServer(dbPath: string, logRequests = true) {
   await initDb(dbPath);
-  //Read .env file
+  // read .env file
   dotenv.config();
 
-  //run express lib
+  // create express app
   const app = express();
 
-  //It parses incoming requests with JSON payloads and is based on body-parser.
+  // middlewares for parsing JSON payloads and opening up cors policy
   app.use(express.json());
+  app.use(cors());
 
   if (logRequests) {
     //Log incoming Requests
