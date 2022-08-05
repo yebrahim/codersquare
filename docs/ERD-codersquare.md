@@ -109,6 +109,10 @@ for Google + Facebook and maybe others (Github?).
 For now we'll start with a single web client, possibly adding mobile clients later.
 
 The web client will be implemented in React.js.
+See Figma/screenshots for details.
+API server will serve a static bundle of the React app.
+Uses ReactQuery to talk to the backend.
+Uses Chakra UI for building the CSS components.
 
 ## Hosting
 
