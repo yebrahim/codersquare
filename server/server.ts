@@ -29,7 +29,7 @@ export async function createServer(dbPath: string, logRequests = true) {
   app.use(cors());
 
   if (logRequests) {
-    //Log incoming Requests
+    // log incoming Requests
     app.use(loggerMiddleware);
   }
 
@@ -38,7 +38,7 @@ export async function createServer(dbPath: string, logRequests = true) {
   const likeHandler = new LikeHandler(db);
   const commentHandler = new CommentHandler(db);
 
-  // Map of endpoints handlers
+  // map of endpoints handlers
   const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
     [Endpoints.healthz]: (_, res) => res.send({ status: 'ok!' }),
 
@@ -58,7 +58,7 @@ export async function createServer(dbPath: string, logRequests = true) {
     [Endpoints.deleteComment]: commentHandler.deleteCommentHandler,
   };
 
-  // Register handlers in express
+  // register handlers in express
   Object.keys(Endpoints).forEach(entry => {
     const config = ENDPOINT_CONFIGS[entry as Endpoints];
     const handler = HANDLERS[entry as Endpoints];
@@ -70,7 +70,7 @@ export async function createServer(dbPath: string, logRequests = true) {
 
   app.use(errHandler);
 
-  // Start server, https in production, otherwise http.
+  // start server, https in production, otherwise http.
   const { ENV } = process.env;
 
   if (ENV === 'production') {

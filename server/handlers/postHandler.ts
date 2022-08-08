@@ -61,6 +61,9 @@ export class PostHandler {
   ) => {
     if (!req.params.id) return res.sendStatus(400);
     const postToReturn: Post | undefined = await this.db.getPost(req.params.id);
+    if (!postToReturn) {
+      return res.sendStatus(404);
+    }
     return res.send({ post: postToReturn });
   };
 }
