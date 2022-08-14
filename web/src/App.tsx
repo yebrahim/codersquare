@@ -1,6 +1,5 @@
+import { Post } from '@codersquare/shared';
 import { useEffect, useState } from 'react';
-
-import { Post } from '../../shared';
 
 export const App = () => {
   const [posts, setPosts] = useState<Post[]>();
