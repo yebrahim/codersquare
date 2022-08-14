@@ -1,6 +1,5 @@
-import { Like } from '@codersquare/shared';
+import { CreateLikeResponse, Like, ListLikesResponse } from '@codersquare/shared';
 
-import { CreateLikeResponse, ListLikesResponse } from '../api';
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 

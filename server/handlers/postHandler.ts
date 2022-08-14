@@ -1,6 +1,3 @@
-import { Post } from '@codersquare/shared';
-import crypto from 'crypto';
-
 import {
   CreatePostRequest,
   CreatePostResponse,
@@ -9,7 +6,10 @@ import {
   GetPostResponse,
   ListPostsRequest,
   ListPostsResponse,
-} from '../api';
+  Post,
+} from '@codersquare/shared';
+import crypto from 'crypto';
+
 import { Datastore } from '../datastore';
 import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 

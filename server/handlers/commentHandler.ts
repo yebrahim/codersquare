@@ -1,12 +1,12 @@
-import { Comment } from '@codersquare/shared';
-import crypto from 'crypto';
-
 import {
+  Comment,
   CreateCommentRequest,
   CreateCommentResponse,
   DeleteCommentResponse,
   ListCommentsResponse,
-} from '../api';
+} from '@codersquare/shared';
+import crypto from 'crypto';
+
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 

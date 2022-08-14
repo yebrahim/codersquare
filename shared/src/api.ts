@@ -1,4 +1,4 @@
-import { Comment, Post, User } from '@codersquare/shared';
+import { Comment, Post, User } from './types';
 
 // Post APIs
 export interface ListPostsRequest {}

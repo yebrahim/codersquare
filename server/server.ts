@@ -1,3 +1,4 @@
+import { ENDPOINT_CONFIGS, Endpoints } from '@codersquare/shared';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { RequestHandler } from 'express';
@@ -7,7 +8,6 @@ import http from 'http';
 import https from 'https';
 
 import { db, initDb } from './datastore';
-import { ENDPOINT_CONFIGS, Endpoints } from './endpoints';
 import { AuthHandler } from './handlers/authHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { LikeHandler } from './handlers/likeHandler';

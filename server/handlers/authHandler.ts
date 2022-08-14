@@ -1,7 +1,12 @@
-import { User } from '@codersquare/shared';
+import {
+  SignInRequest,
+  SignInResponse,
+  SignUpRequest,
+  SignUpResponse,
+  User,
+} from '@codersquare/shared';
 import crypto from 'crypto';
 
-import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
 import { signJwt } from '../auth';
 import { Datastore } from '../datastore';
 import { ExpressHandler } from '../types';
