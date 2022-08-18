@@ -73,6 +73,10 @@ export async function createServer(dbPath: string, logRequests = true) {
   // start server, https in production, otherwise http.
   const { ENV } = process.env;
 
+  if (!ENV) {
+    throw 'Environment not defined, make sure to pass in env vars or have a .env file at root.';
+  }
+
   if (ENV === 'production') {
     const key = fs.readFileSync('/home/codersquare-user/certs/privkey1.pem', 'utf-8');
     const cert = fs.readFileSync('/home/codersquare-user/certs/cert1.pem', 'utf-8');
