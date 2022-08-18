@@ -1,10 +1,12 @@
-import { ListPostsResponse } from '@codersquare/shared';
+import { ENDPOINT_CONFIGS, ListPostsRequest, ListPostsResponse } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 
-import { listPosts } from './client';
+import { callEndpoint } from './fetch-utils';
 
 export const App = () => {
-  const { data, error, isLoading } = useQuery<ListPostsResponse>(['listposts'], listPosts);
+  const { data, error, isLoading } = useQuery(['listposts'], () =>
+    callEndpoint<ListPostsRequest, ListPostsResponse>(ENDPOINT_CONFIGS.listPosts, {})
+  );
 
   if (isLoading) {
     return <div>loading...</div>;
