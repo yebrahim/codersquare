@@ -2,6 +2,7 @@ import { ENDPOINT_CONFIGS, GetPostRequest, GetPostResponse } from '@codersquare/
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
+import { useDocumentTitle } from '../doc-title';
 import { callEndpoint } from '../fetch';
 
 export const ViewPost = () => {
@@ -12,6 +13,8 @@ export const ViewPost = () => {
       postId: postId!,
     })
   );
+  const postname = isLoading ? 'Loading..' : error || !data ? 'Error' : data.post.title;
+  useDocumentTitle(postname);
 
   if (isLoading) {
     return <div>loading...</div>;

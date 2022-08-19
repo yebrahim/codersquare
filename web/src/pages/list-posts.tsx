@@ -1,9 +1,13 @@
+import { Box } from '@chakra-ui/react';
 import { ENDPOINT_CONFIGS, ListPostsRequest, ListPostsResponse } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 
+import { PostCard } from '../components/post-card';
+import { useDocumentTitle } from '../doc-title';
 import { callEndpoint } from '../fetch';
 
 export const ListPosts = () => {
+  useDocumentTitle('Home');
   const { url, method } = ENDPOINT_CONFIGS.listPosts;
   const { data, error, isLoading } = useQuery(['listposts'], () =>
     callEndpoint<ListPostsRequest, ListPostsResponse>(url, method, {})
@@ -18,9 +22,10 @@ export const ListPosts = () => {
   }
 
   return (
-    <div>
-      Posts:
-      {!!data?.posts && <div>{JSON.stringify(data.posts)}</div>}
-    </div>
+    <Box maxW="2xl" m="auto">
+      {data?.posts.map((post, i) => (
+        <PostCard key={i} {...post} />
+      ))}
+    </Box>
   );
 };
