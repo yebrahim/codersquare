@@ -1,4 +1,6 @@
 import {
+  GetUserRequest,
+  GetUserResponse,
   SignInRequest,
   SignInResponse,
   SignUpRequest,
@@ -9,16 +11,16 @@ import crypto from 'crypto';
 
 import { signJwt } from '../auth';
 import { Datastore } from '../datastore';
-import { ExpressHandler } from '../types';
+import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 
-export class AuthHandler {
+export class UserHandler {
   private db: Datastore;
 
   constructor(db: Datastore) {
     this.db = db;
   }
 
-  public signInHandler: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
+  public signIn: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
     const { login, password } = req.body;
     if (!login || !password) {
       return res.sendStatus(400);
@@ -38,20 +40,20 @@ export class AuthHandler {
         firstName: existing.firstName,
         lastName: existing.lastName,
         id: existing.id,
-        username: existing.username,
+        userName: existing.userName,
       },
       jwt,
     });
   };
 
-  public signUpHandler: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
-    const { email, firstName, lastName, password, username } = req.body;
-    if (!email || !firstName || !lastName || !username || !password) {
+  public signUp: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
+    const { email, firstName, lastName, password, userName } = req.body;
+    if (!email || !firstName || !lastName || !userName || !password) {
       return res.status(400).send({ error: 'All fields are required' });
     }
 
     const existing =
-      (await this.db.getUserByEmail(email)) || (await this.db.getUserByUsername(username));
+      (await this.db.getUserByEmail(email)) || (await this.db.getUserByUsername(userName));
     if (existing) {
       return res.status(403).send({ error: 'User already exists' });
     }
@@ -61,7 +63,7 @@ export class AuthHandler {
       email,
       firstName,
       lastName,
-      username,
+      userName: userName,
       password: this.hashPassword(password),
     };
 
@@ -69,6 +71,24 @@ export class AuthHandler {
     const jwt = signJwt({ userId: user.id });
     return res.status(200).send({
       jwt,
+    });
+  };
+
+  public get: ExpressHandlerWithParams<{ id: string }, GetUserRequest, GetUserResponse> = async (
+    req,
+    res
+  ) => {
+    const { id } = req.params;
+    if (!id) return res.sendStatus(400);
+
+    const user = await this.db.getUserById(id);
+    if (!user) {
+      return res.sendStatus(404);
+    }
+    return res.send({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
     });
   };
 

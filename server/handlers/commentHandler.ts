@@ -17,7 +17,7 @@ export class CommentHandler {
     this.db = db;
   }
 
-  public createCommentHandler: ExpressHandlerWithParams<
+  public create: ExpressHandlerWithParams<
     { postId: string },
     CreateCommentRequest,
     CreateCommentResponse
@@ -40,21 +40,19 @@ export class CommentHandler {
     return res.sendStatus(200);
   };
 
-  public deleteCommentHandler: ExpressHandlerWithParams<
-    { id: string },
-    null,
-    DeleteCommentResponse
-  > = async (req, res) => {
+  public delete: ExpressHandlerWithParams<{ id: string }, null, DeleteCommentResponse> = async (
+    req,
+    res
+  ) => {
     if (!req.params.id) return res.status(404).send({ error: 'No Comment Id' });
     await this.db.deleteComment(req.params.id);
     return res.sendStatus(200);
   };
 
-  public listCommentsHandler: ExpressHandlerWithParams<
-    { postId: string },
-    null,
-    ListCommentsResponse
-  > = async (req, res) => {
+  public list: ExpressHandlerWithParams<{ postId: string }, null, ListCommentsResponse> = async (
+    req,
+    res
+  ) => {
     if (!req.params.postId) {
       return res.status(400).send({ error: 'Post ID missing' });
     }

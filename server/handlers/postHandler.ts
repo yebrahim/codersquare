@@ -20,15 +20,12 @@ export class PostHandler {
     this.db = db;
   }
 
-  public listPostsHandler: ExpressHandler<ListPostsRequest, ListPostsResponse> = async (_, res) => {
+  public list: ExpressHandler<ListPostsRequest, ListPostsResponse> = async (_, res) => {
     // TODO: add pagination and filtering
     return res.send({ posts: await this.db.listPosts() });
   };
 
-  public createPostHandler: ExpressHandler<CreatePostRequest, CreatePostResponse> = async (
-    req,
-    res
-  ) => {
+  public create: ExpressHandler<CreatePostRequest, CreatePostResponse> = async (req, res) => {
     // TODO: better error messages
     if (!req.body.title || !req.body.url) {
       return res.sendStatus(400);
@@ -46,16 +43,13 @@ export class PostHandler {
     return res.sendStatus(200);
   };
 
-  public deletePostHandler: ExpressHandler<DeletePostRequest, DeletePostResponse> = async (
-    req,
-    res
-  ) => {
+  public delete: ExpressHandler<DeletePostRequest, DeletePostResponse> = async (req, res) => {
     if (!req.body.postId) return res.sendStatus(400);
     this.db.deletePost(req.body.postId);
     return res.sendStatus(200);
   };
 
-  public getPostHandler: ExpressHandlerWithParams<{ id: string }, null, GetPostResponse> = async (
+  public get: ExpressHandlerWithParams<{ id: string }, null, GetPostResponse> = async (
     req,
     res
   ) => {

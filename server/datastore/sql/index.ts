@@ -32,7 +32,7 @@ export class SqlDataStore implements Datastore {
       user.password,
       user.firstName,
       user.lastName,
-      user.username
+      user.userName
     );
   }
 
@@ -44,8 +44,8 @@ export class SqlDataStore implements Datastore {
     return this.db.get<User>(`SELECT * FROM users WHERE email = ?`, email);
   }
 
-  getUserByUsername(username: string): Promise<User | undefined> {
-    return this.db.get<User>(`SELECT * FROM users WHERE userName = ?`, username);
+  getUserByUsername(userName: string): Promise<User | undefined> {
+    return this.db.get<User>(`SELECT * FROM users WHERE userName = ?`, userName);
   }
 
   listPosts(): Promise<Post[]> {

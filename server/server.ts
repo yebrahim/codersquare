@@ -8,10 +8,10 @@ import http from 'http';
 import https from 'https';
 
 import { db, initDb } from './datastore';
-import { AuthHandler } from './handlers/authHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { LikeHandler } from './handlers/likeHandler';
 import { PostHandler } from './handlers/postHandler';
+import { UserHandler } from './handlers/userHandler';
 import { authMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
@@ -33,7 +33,7 @@ export async function createServer(dbPath: string, logRequests = true) {
     app.use(loggerMiddleware);
   }
 
-  const authHandler = new AuthHandler(db);
+  const userHandler = new UserHandler(db);
   const postHandler = new PostHandler(db);
   const likeHandler = new LikeHandler(db);
   const commentHandler = new CommentHandler(db);
@@ -42,20 +42,21 @@ export async function createServer(dbPath: string, logRequests = true) {
   const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
     [Endpoints.healthz]: (_, res) => res.send({ status: 'ok!' }),
 
-    [Endpoints.signin]: authHandler.signInHandler,
-    [Endpoints.signup]: authHandler.signUpHandler,
+    [Endpoints.signin]: userHandler.signIn,
+    [Endpoints.signup]: userHandler.signUp,
+    [Endpoints.getUser]: userHandler.get,
 
-    [Endpoints.listPosts]: postHandler.listPostsHandler,
-    [Endpoints.getPost]: postHandler.getPostHandler,
-    [Endpoints.createPost]: postHandler.createPostHandler,
-    [Endpoints.deletePost]: postHandler.deletePostHandler,
+    [Endpoints.listPosts]: postHandler.list,
+    [Endpoints.getPost]: postHandler.get,
+    [Endpoints.createPost]: postHandler.create,
+    [Endpoints.deletePost]: postHandler.delete,
 
-    [Endpoints.listLikes]: likeHandler.listLikesHandler,
-    [Endpoints.createLike]: likeHandler.createLikeHandler,
+    [Endpoints.listLikes]: likeHandler.list,
+    [Endpoints.createLike]: likeHandler.create,
 
-    [Endpoints.listComments]: commentHandler.listCommentsHandler,
-    [Endpoints.createComment]: commentHandler.createCommentHandler,
-    [Endpoints.deleteComment]: commentHandler.deleteCommentHandler,
+    [Endpoints.listComments]: commentHandler.list,
+    [Endpoints.createComment]: commentHandler.create,
+    [Endpoints.deleteComment]: commentHandler.delete,
   };
 
   // register handlers in express

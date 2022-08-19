@@ -34,27 +34,30 @@ export interface ListLikesResponse {
 // User APIs
 export type SignUpRequest = Pick<
   User,
-  'email' | 'firstName' | 'lastName' | 'username' | 'password'
+  'email' | 'firstName' | 'lastName' | 'userName' | 'password'
 >;
 export interface SignUpResponse {
   jwt: string;
 }
 
 export interface SignInRequest {
-  login: string; // username or email
+  login: string; // userName or email
   password: string;
 }
 export type SignInResponse = {
-  user: Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
+  user: Pick<User, 'email' | 'firstName' | 'lastName' | 'userName' | 'id'>;
   jwt: string;
 };
+
+export type GetUserRequest = Pick<User, 'id'>;
+export type GetUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName'>;
 
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {
   user: User;
 }
 export type GetUserByUserNameRequest = {
-  username: string;
+  userName: string;
 };
 export interface GetUserByUserNameResponse {
   user: User;
