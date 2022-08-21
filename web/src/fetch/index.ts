@@ -1,5 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
+export const LOCAL_STORAGE_JWT = 'jwtToken';
+
 const HOST =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://codersquare.xyz';
 
@@ -32,17 +34,25 @@ export async function callEndpoint<Request, Response>(
   method: 'get' | 'post' | 'delete',
   request: Request
 ): Promise<Response> {
-  const response = await fetch(`${HOST}${url}`, {
-    method: method,
-    body: method === 'get' ? undefined : JSON.stringify(request),
-  });
-  if (!response.ok) {
-    let msg = '';
-    try {
-      msg = (await response.json()).error;
-    } finally {
-      throw new ApiError(response.status, msg);
+  try {
+    const response = await fetch(`${HOST}${url}`, {
+      method: method,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
+        'Content-Type': 'application/json',
+      },
+      body: method === 'get' ? undefined : JSON.stringify(request),
+    });
+    if (!response.ok) {
+      let msg = '';
+      try {
+        msg = (await response.json()).error;
+      } finally {
+        throw new ApiError(response.status, msg);
+      }
     }
+    return (await response.json()) as Response;
+  } catch {
+    throw new ApiError(0, 'Not connected');
   }
-  return (await response.json()) as Response;
 }
