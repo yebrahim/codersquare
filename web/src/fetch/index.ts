@@ -34,25 +34,21 @@ export async function callEndpoint<Request, Response>(
   method: 'get' | 'post' | 'delete',
   request: Request
 ): Promise<Response> {
-  try {
-    const response = await fetch(`${HOST}${url}`, {
-      method: method,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
-        'Content-Type': 'application/json',
-      },
-      body: method === 'get' ? undefined : JSON.stringify(request),
-    });
-    if (!response.ok) {
-      let msg = '';
-      try {
-        msg = (await response.json()).error;
-      } finally {
-        throw new ApiError(response.status, msg);
-      }
+  const response = await fetch(`${HOST}${url}`, {
+    method: method,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
+      'Content-Type': 'application/json',
+    },
+    body: method === 'get' ? undefined : JSON.stringify(request),
+  });
+  if (!response.ok) {
+    let msg = '';
+    try {
+      msg = (await response.json()).error;
+    } finally {
+      throw new ApiError(response.status, msg);
     }
-    return (await response.json()) as Response;
-  } catch {
-    throw new ApiError(0, 'Not connected');
   }
+  return (await response.json()) as Response;
 }

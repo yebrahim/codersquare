@@ -1,28 +1,32 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
-import { isLoggedIn, signIn } from '../fetch/auth';
+import { ApiError } from '../fetch';
+import { isLoggedIn, signUp } from '../fetch/auth';
 import { ROUTES } from '../routes';
 
-export const SignIn = () => {
+export const SignUp = () => {
   const navigate = useNavigate();
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
   const [un, setUn] = useState('');
   const [pw, setPw] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  const signin = useCallback(
+  const signup = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
-        await signIn(un, pw);
+        await signUp(fname, lname, email, pw, un);
         navigate(ROUTES.HOME);
-      } catch {
-        setError('Bad credentials');
+      } catch (e) {
+        setError((e as ApiError).message);
       }
     },
-    [navigate, pw, un]
+    [fname, lname, email, pw, un, navigate]
   );
 
   useEffect(() => {
@@ -32,10 +36,10 @@ export const SignIn = () => {
   }, [navigate]);
 
   return (
-    <form onSubmit={signin}>
+    <form onSubmit={signup}>
       <Flex maxW="sm" mx="auto" my={10} direction="column" gap={4}>
         <RequiredInput
-          placeholder="Username or email"
+          placeholder="Username"
           value={un}
           variant="filled"
           onChange={e => setUn(e.target.value)}
@@ -49,9 +53,30 @@ export const SignIn = () => {
           onChange={e => setPw(e.target.value)}
         />
 
+        <RequiredInput
+          placeholder="Email"
+          value={email}
+          variant="filled"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <Input
+          placeholder="First name"
+          value={fname}
+          variant="filled"
+          onChange={e => setFname(e.target.value)}
+        />
+
+        <Input
+          placeholder="Last name"
+          value={lname}
+          variant="filled"
+          onChange={e => setLname(e.target.value)}
+        />
+
         <Box m="auto">
-          <Button type="submit" display="block" onClick={signin}>
-            Sign in
+          <Button type="submit" display="block" onClick={signup}>
+            Sign up
           </Button>
         </Box>
 
