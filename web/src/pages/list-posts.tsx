@@ -24,7 +24,7 @@ export const ListPosts = () => {
   return (
     <Box maxW="2xl" m="auto">
       {data?.posts.map((post, i) => (
-        <PostCard key={i} {...post} />
+        <PostCard key={i} post={post} />
       ))}
     </Box>
   );

@@ -50,5 +50,6 @@ export async function callEndpoint<Request, Response>(
       throw new ApiError(response.status, msg);
     }
   }
-  return (await response.json()) as Response;
+  const isJson = response.headers.get('content-type')?.includes('application/json');
+  return isJson ? ((await response.json()) as Response) : ({} as Response);
 }

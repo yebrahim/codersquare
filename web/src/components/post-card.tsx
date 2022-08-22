@@ -8,12 +8,17 @@ import {
   Post,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 import { BsHeart } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 import { callEndpoint } from '../fetch';
 
-export const PostCard = ({ id, title, url: postUrl, userId }: Post) => {
+export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
+  post,
+  hideDiscuss,
+}) => {
+  const { id, url: postUrl, title, userId } = post;
   const { method: getUserMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
@@ -68,19 +73,21 @@ export const PostCard = ({ id, title, url: postUrl, userId }: Post) => {
             </Text>
           </a>
 
-          <Link to={`/p/${id}`}>
-            <Button
-              ml={2}
-              variant="outline"
-              borderColor="gray.300"
-              borderRadius={4}
-              p={2}
-              size="xs"
-              color="gray"
-            >
-              {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
-            </Button>
-          </Link>
+          {!hideDiscuss && (
+            <Link to={`/p/${id}`}>
+              <Button
+                ml={2}
+                variant="outline"
+                borderColor="gray.300"
+                borderRadius={4}
+                p={2}
+                size="xs"
+                color="gray"
+              >
+                {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
+              </Button>
+            </Link>
+          )}
         </Flex>
 
         <Flex gap={1}>
