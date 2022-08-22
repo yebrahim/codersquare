@@ -37,6 +37,7 @@ export const PostCard = ({ id, title, url: postUrl, userId }: Post) => {
     )
   );
 
+  const urlWithProtocol = postUrl.startsWith('http') ? postUrl : 'http://' + postUrl;
   const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
   const commentsCount = countCommentsRes?.count ?? 0;
 
@@ -55,17 +56,17 @@ export const PostCard = ({ id, title, url: postUrl, userId }: Post) => {
 
       <Box>
         <Flex align="center">
-          <Link to={`/p/${id}`}>
+          <a href={urlWithProtocol}>
             <Text color="gray.600" fontWeight="bold" pr={2}>
               {title}
             </Text>
-          </Link>
+          </a>
 
-          <Link to={`/p/${id}`}>
+          <a href={urlWithProtocol}>
             <Text fontSize="sm" color="gray.400">
-              ({postUrl})
+              ({getUrlDomain(urlWithProtocol)})
             </Text>
-          </Link>
+          </a>
 
           <Link to={`/p/${id}`}>
             <Button
@@ -93,4 +94,13 @@ export const PostCard = ({ id, title, url: postUrl, userId }: Post) => {
       </Box>
     </Flex>
   );
+};
+
+const getUrlDomain = (url: string): string => {
+  try {
+    const short = new URL(url).host;
+    return short.startsWith('www.') ? short.substring(4) : short;
+  } catch {
+    return url;
+  }
 };
