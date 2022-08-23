@@ -8,6 +8,7 @@ import {
   Post,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
+import { formatDistance } from 'date-fns';
 import React from 'react';
 import { BsHeart } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
@@ -90,13 +91,11 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
           )}
         </Flex>
 
-        <Flex gap={1}>
-          <Text fontSize="sm" color="gray.500">
-            By:
-          </Text>
-          <Text fontSize="sm" fontWeight="bold" color="gray.500">
-            {userName}
-          </Text>
+        <Flex gap={1} fontSize="sm" color="gray.500">
+          <Text>By:</Text>
+          <Text fontWeight="bold">{userName}</Text>
+
+          <Text> - {formatDistance(post.postedAt, Date.now(), { addSuffix: true })}</Text>
         </Flex>
       </Box>
     </Flex>

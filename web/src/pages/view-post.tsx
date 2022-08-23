@@ -11,9 +11,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { CommentCard } from '../components/comment-card';
 import { PostCard } from '../components/post-card';
 import { useDocumentTitle } from '../doc-title';
 import { callEndpoint } from '../fetch';
+import { isLoggedIn } from '../fetch/auth';
 
 export const ViewPost = () => {
   const { id: postId } = useParams();
@@ -68,13 +70,33 @@ export const ViewPost = () => {
       </Box>
 
       <form onSubmit={submitComment}>
-        <Flex direction="column" gap={4} mt={4}>
+        <Flex direction="column" gap={4} mt={4} ml={4}>
           {commentsError ? <Text color="red.700">Error loading comments.</Text> : null}
 
           {commentsLoading ? <Text>Loading comments...</Text> : null}
 
+          {isLoggedIn() && (
+            <>
+              <Textarea
+                placeholder="Type to add your own comment.."
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                maxW="xl"
+              />
+              <Box>
+                <Button size="sm" onClick={submitComment} disabled={!comment.trim().length}>
+                  Add comment
+                </Button>
+              </Box>
+
+              <Box w="xl">
+                <hr />
+              </Box>
+            </>
+          )}
+
           {commentsData?.comments?.map((comment, i) => (
-            <Box key={i}>{comment.comment}</Box>
+            <CommentCard key={i} comment={comment} />
           ))}
 
           {!commentsData?.comments.length && (
@@ -82,15 +104,6 @@ export const ViewPost = () => {
               No comments yet. Add the first comment below.
             </Text>
           )}
-
-          <Box w="xl">
-            <hr />
-          </Box>
-
-          <Textarea value={comment} onChange={e => setComment(e.target.value)} maxW="xl" />
-          <Box>
-            <Button onClick={submitComment}>Add comment</Button>
-          </Box>
         </Flex>
       </form>
     </Box>
