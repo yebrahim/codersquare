@@ -32,9 +32,14 @@ export const Navbar = () => {
         <Image src={Logo} />
       </Link>
 
-      <Flex gap={5}>
+      <Flex gap={5} align="center">
         {isLoggedIn() ? (
           <>
+            <Link to={ROUTES.NEW_POST}>
+              <Button variant="solid" size="sm">
+                New post
+              </Button>
+            </Link>
             <Text fontSize="sm" color="gray.600">
               {currentUser?.userName}
             </Text>

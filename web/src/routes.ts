@@ -3,4 +3,5 @@ export const ROUTES = {
   VIEW_POST: (pid: string) => `/p/${pid}`,
   SIGN_IN: '/signin',
   SIGN_UP: '/signup',
+  NEW_POST: '/new',
 };
