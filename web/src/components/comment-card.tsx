@@ -7,6 +7,7 @@ import { BsHeart } from 'react-icons/bs';
 import { LinkItUrl } from 'react-linkify-it';
 
 import { callEndpoint } from '../fetch';
+import { isLoggedIn } from '../fetch/auth';
 
 export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
   const { comment: commentText, postedAt, userId } = comment;
@@ -30,16 +31,18 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
   return (
     <Box fontSize="sm" color="GrayText">
       <Flex gap={1} align="baseline">
-        <Box position="relative" w={4}>
-          <Icon
-            position="absolute"
-            top="-0.8rem"
-            as={BsHeart}
-            fill="gray"
-            cursor="pointer"
-            _hover={{ fill: 'brown' }}
-          />
-        </Box>
+        {isLoggedIn() && (
+          <Box position="relative" w={4}>
+            <Icon
+              position="absolute"
+              top="-0.8rem"
+              as={BsHeart}
+              fill="gray"
+              cursor="pointer"
+              _hover={{ fill: 'brown' }}
+            />
+          </Box>
+        )}
 
         <Text fontSize="xs"> By: </Text>
 

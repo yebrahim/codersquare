@@ -14,6 +14,7 @@ import { BsHeart } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 import { callEndpoint } from '../fetch';
+import { isLoggedIn } from '../fetch/auth';
 
 export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
   post,
@@ -49,16 +50,18 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
 
   return (
     <Flex m={4} gap={2} align="baseline">
-      <Box position="relative" w={4}>
-        <Icon
-          position="absolute"
-          top="-0.8rem"
-          as={BsHeart}
-          fill="gray"
-          cursor="pointer"
-          _hover={{ fill: 'brown' }}
-        />
-      </Box>
+      {isLoggedIn() && (
+        <Box position="relative" w={4}>
+          <Icon
+            position="absolute"
+            top="-0.8rem"
+            as={BsHeart}
+            fill="gray"
+            cursor="pointer"
+            _hover={{ fill: 'brown' }}
+          />
+        </Box>
+      )}
 
       <Box>
         <Flex align="center">
