@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
 import React from 'react';
 import { BsHeart } from 'react-icons/bs';
+import { LinkItUrl } from 'react-linkify-it';
 
 import { callEndpoint } from '../fetch';
 
@@ -50,7 +51,9 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
       </Flex>
 
       <Box whiteSpace="pre-line" borderLeft="1px solid #ddd" pl={2} ml="7px" fontSize="sm">
-        <Text color="InfoText">{commentText}</Text>
+        <LinkItUrl>
+          <Text color="InfoText">{commentText}</Text>
+        </LinkItUrl>
       </Box>
     </Box>
   );
