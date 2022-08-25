@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 import { callEndpoint } from '../fetch';
 import { isLoggedIn } from '../fetch/auth';
+import { ROUTES } from '../routes';
 
 export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
   post,
@@ -30,9 +31,7 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
     callEndpoint<GetUserRequest, GetUserResponse>(
       getUserUrl.replace(':id', userId),
       getUserMethod,
-      {
-        id: userId,
-      }
+      {}
     )
   );
   const { method: countCommentsMethod, url: countCommentsUrl } = ENDPOINT_CONFIGS.countComments;
@@ -96,7 +95,9 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
 
         <Flex gap={1} fontSize="sm" color="gray.500">
           <Text>By:</Text>
-          <Text fontWeight="bold">{userName}</Text>
+          <Link to={user ? ROUTES.USER_PROFILE(user.id) : '#'}>
+            <Text fontWeight="bold">{userName}</Text>
+          </Link>
 
           <Text> - {formatDistance(post.postedAt, Date.now(), { addSuffix: true })}</Text>
         </Flex>

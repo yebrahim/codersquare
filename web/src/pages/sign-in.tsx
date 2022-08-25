@@ -3,10 +3,12 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 import { isLoggedIn, signIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
 
 export const SignIn = () => {
+  useDocumentTitle('Sign in');
   const navigate = useNavigate();
   const [un, setUn] = useState('');
   const [pw, setPw] = useState('');

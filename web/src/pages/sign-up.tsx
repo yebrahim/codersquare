@@ -3,11 +3,13 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 import { ApiError } from '../fetch';
 import { isLoggedIn, signUp } from '../fetch/auth';
 import { ROUTES } from '../routes';
 
 export const SignUp = () => {
+  useDocumentTitle('Sign up');
   const navigate = useNavigate();
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');

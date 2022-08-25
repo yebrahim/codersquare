@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import { ENDPOINT_CONFIGS, ListPostsRequest, ListPostsResponse } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 
@@ -22,10 +21,10 @@ export const ListPosts = () => {
   }
 
   return (
-    <Box maxW="2xl">
+    <>
       {data?.posts.map((post, i) => (
         <PostCard key={i} post={post} />
       ))}
-    </Box>
+    </>
   );
 };

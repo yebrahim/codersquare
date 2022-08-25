@@ -4,11 +4,13 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 import { ApiError, callEndpoint } from '../fetch';
 import { isLoggedIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
 
 export const NewPost = () => {
+  useDocumentTitle('New post');
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');

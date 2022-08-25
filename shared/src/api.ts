@@ -58,9 +58,6 @@ export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'user
 export type GetCurrentUserRequest = {};
 export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
 
-export type GetCurrentUserRequest = {};
-export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
-
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {
   user: User;

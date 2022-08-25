@@ -20,9 +20,7 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
     callEndpoint<GetUserRequest, GetUserResponse>(
       getUserUrl.replace(':id', userId),
       getUserMethod,
-      {
-        id: userId,
-      }
+      {}
     )
   );
 
