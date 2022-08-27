@@ -1,5 +1,6 @@
 import {
   Comment,
+  CountCommentsResponse,
   CreateCommentRequest,
   CreateCommentResponse,
   DeleteCommentResponse,
@@ -58,5 +59,16 @@ export class CommentHandler {
     }
     const comments = await this.db.listComments(req.params.postId);
     return res.send({ comments });
+  };
+
+  public count: ExpressHandlerWithParams<{ postId: string }, null, CountCommentsResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.params.postId) {
+      return res.status(400).send({ error: 'Post ID missing' });
+    }
+    const count = await this.db.countComments(req.params.postId);
+    return res.send({ count });
   };
 }

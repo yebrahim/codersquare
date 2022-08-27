@@ -1,4 +1,6 @@
 import {
+  GetCurrentUserRequest,
+  GetCurrentUserResponse,
   GetUserRequest,
   GetUserResponse,
   SignInRequest,
@@ -48,14 +50,15 @@ export class UserHandler {
 
   public signUp: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
     const { email, firstName, lastName, password, userName } = req.body;
-    if (!email || !firstName || !lastName || !userName || !password) {
-      return res.status(400).send({ error: 'All fields are required' });
+    if (!email || !userName || !password) {
+      return res.status(400).send({ error: 'Email, username, and password are required' });
     }
 
-    const existing =
-      (await this.db.getUserByEmail(email)) || (await this.db.getUserByUsername(userName));
-    if (existing) {
-      return res.status(403).send({ error: 'User already exists' });
+    if (await this.db.getUserByEmail(email)) {
+      return res.status(403).send({ error: 'A user with this email already exists' });
+    }
+    if (await this.db.getUserByUsername(userName)) {
+      return res.status(403).send({ error: 'A user with this username already exists' });
     }
 
     const user: User = {
@@ -86,9 +89,26 @@ export class UserHandler {
       return res.sendStatus(404);
     }
     return res.send({
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       userName: user.userName,
+    });
+  };
+
+  public getCurrent: ExpressHandler<GetCurrentUserRequest, GetCurrentUserResponse> = async (
+    _,
+    res
+  ) => {
+    const user = await this.db.getUserById(res.locals.userId);
+    if (!user) {
+      return res.sendStatus(500);
+    }
+    return res.send({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      email: user.email,
     });
   };
 

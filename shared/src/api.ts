@@ -10,6 +10,7 @@ export type CreatePostRequest = Pick<Post, 'title' | 'url'>;
 export type DeletePostRequest = { postId: string };
 export type DeletePostResponse = {};
 export interface CreatePostResponse {}
+export type GetPostRequest = { postId: string };
 export interface GetPostResponse {
   post: Post;
 }
@@ -17,6 +18,8 @@ export interface GetPostResponse {
 // Comment APIs
 export type CreateCommentRequest = Pick<Comment, 'comment'>;
 export interface CreateCommentResponse {}
+export type CountCommentsRequest = { postId: string };
+export type CountCommentsResponse = { count: number };
 
 export interface ListCommentsResponse {
   comments: Comment[];
@@ -49,8 +52,11 @@ export type SignInResponse = {
   jwt: string;
 };
 
-export type GetUserRequest = Pick<User, 'id'>;
-export type GetUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName'>;
+export type GetUserRequest = {};
+export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName'>;
+
+export type GetCurrentUserRequest = {};
+export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
 
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {

@@ -45,6 +45,7 @@ export async function createServer(dbPath: string, logRequests = true) {
     [Endpoints.signin]: userHandler.signIn,
     [Endpoints.signup]: userHandler.signUp,
     [Endpoints.getUser]: userHandler.get,
+    [Endpoints.getCurrentUser]: userHandler.getCurrent,
 
     [Endpoints.listPosts]: postHandler.list,
     [Endpoints.getPost]: postHandler.get,
@@ -54,6 +55,7 @@ export async function createServer(dbPath: string, logRequests = true) {
     [Endpoints.listLikes]: likeHandler.list,
     [Endpoints.createLike]: likeHandler.create,
 
+    [Endpoints.countComments]: commentHandler.count,
     [Endpoints.listComments]: commentHandler.list,
     [Endpoints.createComment]: commentHandler.create,
     [Endpoints.deleteComment]: commentHandler.delete,

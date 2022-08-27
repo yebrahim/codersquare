@@ -49,7 +49,7 @@ export class SqlDataStore implements Datastore {
   }
 
   listPosts(): Promise<Post[]> {
-    return this.db.all<Post[]>('SELECT * FROM posts');
+    return this.db.all<Post[]>('SELECT * FROM posts ORDER BY postedAt DESC');
   }
 
   async createPost(post: Post): Promise<void> {
@@ -86,8 +86,19 @@ export class SqlDataStore implements Datastore {
     );
   }
 
+  async countComments(postId: string): Promise<number> {
+    const result = await this.db.get<{ count: number }>(
+      'SELECT COUNT(*) FROM comments WHERE postId = ?',
+      postId
+    );
+    return result?.count ?? 0;
+  }
+
   async listComments(postId: string): Promise<Comment[]> {
-    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE postId = ?', postId);
+    return await this.db.all<Comment[]>(
+      'SELECT * FROM comments WHERE postId = ? ORDER BY postedAt DESC',
+      postId
+    );
   }
 
   async deleteComment(id: string): Promise<void> {
