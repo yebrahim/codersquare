@@ -88,7 +88,7 @@ export class SqlDataStore implements Datastore {
 
   async countComments(postId: string): Promise<number> {
     const result = await this.db.get<{ count: number }>(
-      'SELECT COUNT(*) FROM comments WHERE postId = ?',
+      'SELECT COUNT(*) as count FROM comments WHERE postId = ?',
       postId
     );
     return result?.count ?? 0;

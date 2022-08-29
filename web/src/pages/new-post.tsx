@@ -26,14 +26,17 @@ export const NewPost = () => {
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
-        const { method, url } = ENDPOINT_CONFIGS.createPost;
-        await callEndpoint<CreatePostRequest, CreatePostResponse>(url, method, { title, url });
+        const { method, url: createPostUrl } = ENDPOINT_CONFIGS.createPost;
+        await callEndpoint<CreatePostRequest, CreatePostResponse>(createPostUrl, method, {
+          title,
+          url,
+        });
         navigate(ROUTES.HOME);
       } catch (e) {
         setError((e as ApiError).message);
       }
     },
-    [navigate, title]
+    [navigate, title, url]
   );
 
   return (
@@ -46,6 +49,7 @@ export const NewPost = () => {
             value={title}
             variant="filled"
             onChange={e => setTitle(e.target.value)}
+            style={{ unicodeBidi: 'plaintext' }}
           />
         </FormControl>
 
@@ -56,6 +60,7 @@ export const NewPost = () => {
             variant="filled"
             value={url}
             onChange={e => setUrl(e.target.value)}
+            style={{ unicodeBidi: 'plaintext' }}
           />
         </FormControl>
 

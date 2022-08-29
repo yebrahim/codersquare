@@ -65,7 +65,7 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
       <Box>
         <Flex align="center">
           <a href={urlWithProtocol}>
-            <Text color="gray.600" fontWeight="bold" pr={2}>
+            <Text color="gray.600" fontWeight="bold" pr={2} style={{ unicodeBidi: 'plaintext' }}>
               {title}
             </Text>
           </a>
@@ -85,9 +85,11 @@ export const PostCard: React.FC<{ post: Post; hideDiscuss?: boolean }> = ({
                 borderRadius={4}
                 p={2}
                 size="xs"
-                color="gray"
+                color={commentsCount ? undefined : 'gray'}
               >
-                {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
+                {commentsCount
+                  ? `${commentsCount} comment${commentsCount === 1 ? '' : 's'}`
+                  : 'discuss'}
               </Button>
             </Link>
           )}

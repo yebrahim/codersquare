@@ -40,9 +40,13 @@ export const Navbar = () => {
                 New post
               </Button>
             </Link>
-            <Text fontSize="sm" color="gray.600">
-              {currentUser?.userName}
-            </Text>
+            {currentUser && (
+              <Link to={ROUTES.USER_PROFILE(currentUser.id)}>
+                <Text fontSize="sm" color="gray.600">
+                  {currentUser.userName}
+                </Text>
+              </Link>
+            )}
             <Button size="sm" variant="link" onClick={onSignout}>
               Sign out
             </Button>

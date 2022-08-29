@@ -82,6 +82,7 @@ export const ViewPost = () => {
                 value={comment}
                 onChange={e => setComment(e.target.value)}
                 maxW="xl"
+                style={{ unicodeBidi: 'plaintext' }}
               />
               <Box>
                 <Button size="sm" onClick={submitComment} disabled={!comment.trim().length}>
