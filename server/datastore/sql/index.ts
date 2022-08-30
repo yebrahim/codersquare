@@ -48,8 +48,13 @@ export class SqlDataStore implements Datastore {
     return this.db.get<User>(`SELECT * FROM users WHERE userName = ?`, userName);
   }
 
-  listPosts(): Promise<Post[]> {
-    return this.db.all<Post[]>('SELECT * FROM posts ORDER BY postedAt DESC');
+  listPosts(userId?: string): Promise<Post[]> {
+    return this.db.all<Post[]>(
+      `SELECT *, EXISTS(
+        SELECT 1 FROM likes WHERE likes.postId = posts.id AND likes.userId = ?
+      ) as liked FROM posts ORDER BY postedAt DESC`,
+      userId
+    );
   }
 
   async createPost(post: Post): Promise<void> {
@@ -63,8 +68,15 @@ export class SqlDataStore implements Datastore {
     );
   }
 
-  async getPost(id: string): Promise<Post | undefined> {
-    return await this.db.get<Post>('SELECT * FROM posts WHERE id = ?', id);
+  async getPost(id: string, userId: string): Promise<Post | undefined> {
+    return await this.db.get<Post>(
+      `SELECT *, EXISTS(
+        SELECT 1 FROM likes WHERE likes.postId = ? AND likes.userId = ?
+      ) as liked FROM posts WHERE id = ?`,
+      id,
+      userId,
+      id
+    );
   }
 
   async deletePost(id: string): Promise<void> {
@@ -73,6 +85,14 @@ export class SqlDataStore implements Datastore {
 
   async createLike(like: Like): Promise<void> {
     await this.db.run('INSERT INTO likes(userId, postId) VALUES(?,?)', like.userId, like.postId);
+  }
+
+  async deleteLike(like: Like): Promise<void> {
+    await this.db.run(
+      'DELETE FROM likes WHERE userId = ? AND postId = ?',
+      like.userId,
+      like.postId
+    );
   }
 
   async createComment(comment: Comment): Promise<void> {

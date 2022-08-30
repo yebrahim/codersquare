@@ -28,8 +28,6 @@ export interface ListCommentsResponse {
 export type DeleteCommentResponse = {};
 
 // Like APIs
-export interface CreateLikeResponse {}
-
 export interface ListLikesResponse {
   likes: Number;
 }

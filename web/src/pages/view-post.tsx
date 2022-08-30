@@ -20,7 +20,12 @@ import { isLoggedIn } from '../fetch/auth';
 export const ViewPost = () => {
   const { id: postId } = useParams();
   const { url, method } = ENDPOINT_CONFIGS.getPost;
-  const { data, error, isLoading } = useQuery(['viewpost'], () =>
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: refetchPost,
+  } = useQuery(['viewpost'], () =>
     callEndpoint<GetPostRequest, GetPostResponse>(url.replace(':id', postId!), method, {
       postId: postId!,
     })
@@ -30,7 +35,7 @@ export const ViewPost = () => {
     data: commentsData,
     error: commentsError,
     isLoading: commentsLoading,
-    refetch,
+    refetch: refetchComments,
   } = useQuery(['listcomments'], () =>
     callEndpoint<{}, ListCommentsResponse>(
       commentsUrl.replace(':postId', postId!),
@@ -47,8 +52,8 @@ export const ViewPost = () => {
       { comment }
     );
     setComment('');
-    refetch();
-  }, [comment, postId, refetch]);
+    refetchComments();
+  }, [comment, postId, refetchComments]);
 
   const postname = isLoading ? 'Loading..' : error || !data ? 'Error' : data.post.title;
   useDocumentTitle(postname);
@@ -63,7 +68,7 @@ export const ViewPost = () => {
 
   return (
     <Box>
-      <PostCard post={data.post} hideDiscuss />
+      <PostCard post={data.post} refetch={refetchPost} hideDiscuss />
 
       <Box w="xl">
         <hr />

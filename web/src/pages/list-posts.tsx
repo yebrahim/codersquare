@@ -8,7 +8,7 @@ import { callEndpoint } from '../fetch';
 export const ListPosts = () => {
   useDocumentTitle('Home');
   const { url, method } = ENDPOINT_CONFIGS.listPosts;
-  const { data, error, isLoading } = useQuery(['listposts'], () =>
+  const { data, error, isLoading, refetch } = useQuery(['listposts'], () =>
     callEndpoint<ListPostsRequest, ListPostsResponse>(url, method, {})
   );
 
@@ -23,7 +23,7 @@ export const ListPosts = () => {
   return (
     <>
       {data?.posts.map((post, i) => (
-        <PostCard key={i} post={post} />
+        <PostCard key={i} post={post} refetch={refetch} />
       ))}
     </>
   );

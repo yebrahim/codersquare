@@ -15,6 +15,7 @@ export enum Endpoints {
 
   listLikes = 'listLikes',
   createLike = 'createLike',
+  deleteLike = 'deleteLike',
 
   countComments = 'countComments',
   listComments = 'listComments',
@@ -37,6 +38,7 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
 
   [Endpoints.listLikes]: { method: 'get', url: '/api/v1/likes/:postId' },
   [Endpoints.createLike]: { method: 'post', url: '/api/v1/likes/:postId', auth: true },
+  [Endpoints.deleteLike]: { method: 'delete', url: '/api/v1/likes/:postId', auth: true },
 
   [Endpoints.countComments]: { method: 'get', url: '/api/v1/comments/:postId/count' },
   [Endpoints.listComments]: { method: 'get', url: '/api/v1/comments/:postId' },

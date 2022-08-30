@@ -2,10 +2,10 @@ import { verifyJwt } from '../auth';
 import { db } from '../datastore';
 import { ExpressHandler } from '../types';
 
-export const authMiddleware: ExpressHandler<any, any> = async (req, res, next) => {
+export const jwtParseMiddleware: ExpressHandler<any, any> = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
-    return res.sendStatus(401);
+    return next();
   }
 
   try {
@@ -15,8 +15,15 @@ export const authMiddleware: ExpressHandler<any, any> = async (req, res, next) =
       return res.status(401).send({ error: 'User not found' });
     }
     res.locals.userId = user.id;
-    next();
+    return next();
   } catch {
     return res.status(401).send({ error: 'Bad token' });
   }
+};
+
+export const enforceJwtMiddleware: ExpressHandler<any, any> = async (_, res, next) => {
+  if (!res.locals.userId) {
+    return res.sendStatus(401);
+  }
+  return next();
 };
