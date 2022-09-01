@@ -1,11 +1,12 @@
 import { ENDPOINT_CONFIGS, ListPostsRequest, ListPostsResponse } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 
-import { callEndpoint } from './fetch-utils';
+import { callEndpoint } from './fetch';
 
 export const App = () => {
+  const { url, method } = ENDPOINT_CONFIGS.listPosts;
   const { data, error, isLoading } = useQuery(['listposts'], () =>
-    callEndpoint<ListPostsRequest, ListPostsResponse>(ENDPOINT_CONFIGS.listPosts, {})
+    callEndpoint<ListPostsRequest, ListPostsResponse>(url, method, {})
   );
 
   if (isLoading) {
