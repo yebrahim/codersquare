@@ -105,6 +105,7 @@ export class UserHandler {
       return res.sendStatus(500);
     }
     return res.send({
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       userName: user.userName,

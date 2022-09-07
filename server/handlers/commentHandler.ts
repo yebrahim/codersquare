@@ -26,7 +26,7 @@ export class CommentHandler {
     if (!req.params.postId) return res.status(400).send({ error: 'Post ID is missing' });
     if (!req.body.comment) return res.status(400).send({ error: 'Comment is missing' });
 
-    if (!(await this.db.getPost(req.params.postId))) {
+    if (!(await this.db.getPost(req.params.postId, res.locals.userId))) {
       return res.status(404).send({ error: 'No post found with this ID' });
     }
 

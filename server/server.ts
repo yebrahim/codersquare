@@ -12,7 +12,7 @@ import { CommentHandler } from './handlers/commentHandler';
 import { LikeHandler } from './handlers/likeHandler';
 import { PostHandler } from './handlers/postHandler';
 import { UserHandler } from './handlers/userHandler';
-import { authMiddleware } from './middleware/authMiddleware';
+import { enforceJwtMiddleware, jwtParseMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
 
@@ -54,6 +54,7 @@ export async function createServer(dbPath: string, logRequests = true) {
 
     [Endpoints.listLikes]: likeHandler.list,
     [Endpoints.createLike]: likeHandler.create,
+    [Endpoints.deleteLike]: likeHandler.delete,
 
     [Endpoints.countComments]: commentHandler.count,
     [Endpoints.listComments]: commentHandler.list,
@@ -67,8 +68,13 @@ export async function createServer(dbPath: string, logRequests = true) {
     const handler = HANDLERS[entry as Endpoints];
 
     config.auth
-      ? app[config.method](config.url, authMiddleware, asyncHandler(handler))
-      : app[config.method](config.url, asyncHandler(handler));
+      ? app[config.method](
+          config.url,
+          jwtParseMiddleware,
+          enforceJwtMiddleware,
+          asyncHandler(handler)
+        )
+      : app[config.method](config.url, jwtParseMiddleware, asyncHandler(handler));
   });
 
   app.use(errHandler);

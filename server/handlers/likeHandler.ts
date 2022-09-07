@@ -1,4 +1,4 @@
-import { CreateLikeResponse, Like, ListLikesResponse } from '@codersquare/shared';
+import { Like, ListLikesResponse } from '@codersquare/shared';
 
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
@@ -10,10 +10,7 @@ export class LikeHandler {
     this.db = db;
   }
 
-  public create: ExpressHandlerWithParams<{ postId: string }, null, CreateLikeResponse> = async (
-    req,
-    res
-  ) => {
+  public create: ExpressHandlerWithParams<{ postId: string }, null, {}> = async (req, res) => {
     if (!req.params.postId) {
       return res.status(400).send({ error: 'Post ID missing' });
     }
@@ -35,6 +32,23 @@ export class LikeHandler {
     };
 
     this.db.createLike(likeForInsert);
+    return res.sendStatus(200);
+  };
+
+  public delete: ExpressHandlerWithParams<{ postId: string }, null, {}> = async (req, res) => {
+    if (!req.params.postId) {
+      return res.status(400).send({ error: 'Post ID missing' });
+    }
+    if (!(await this.db.getPost(req.params.postId))) {
+      return res.status(404).send({ error: 'No post found with this ID' });
+    }
+
+    const likeForDelete: Like = {
+      postId: req.params.postId,
+      userId: res.locals.userId,
+    };
+
+    this.db.deleteLike(likeForDelete);
     return res.sendStatus(200);
   };
 

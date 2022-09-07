@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.chakra-text a {
+  text-decoration: underline;
+  text-decoration-color: brown;
+  color: brown;
+}

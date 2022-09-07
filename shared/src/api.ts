@@ -28,8 +28,6 @@ export interface ListCommentsResponse {
 export type DeleteCommentResponse = {};
 
 // Like APIs
-export interface CreateLikeResponse {}
-
 export interface ListLikesResponse {
   likes: Number;
 }
@@ -56,7 +54,10 @@ export type GetUserRequest = {};
 export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName'>;
 
 export type GetCurrentUserRequest = {};
-export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
+export type GetCurrentUserResponse = Pick<
+  User,
+  'id' | 'firstName' | 'lastName' | 'userName' | 'email'
+>;
 
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {

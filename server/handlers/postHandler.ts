@@ -22,7 +22,8 @@ export class PostHandler {
 
   public list: ExpressHandler<ListPostsRequest, ListPostsResponse> = async (_, res) => {
     // TODO: add pagination and filtering
-    return res.send({ posts: await this.db.listPosts() });
+    const userId = res.locals.userId;
+    return res.send({ posts: await this.db.listPosts(userId) });
   };
 
   public create: ExpressHandler<CreatePostRequest, CreatePostResponse> = async (req, res) => {
@@ -54,7 +55,7 @@ export class PostHandler {
     res
   ) => {
     if (!req.params.id) return res.sendStatus(400);
-    const postToReturn: Post | undefined = await this.db.getPost(req.params.id);
+    const postToReturn: Post | undefined = await this.db.getPost(req.params.id, res.locals.userId);
     if (!postToReturn) {
       return res.sendStatus(404);
     }
