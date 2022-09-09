@@ -1,6 +1,6 @@
+import { EndpointConfig } from '@codersquare/shared';
 import { QueryClient } from '@tanstack/react-query';
-
-export const LOCAL_STORAGE_JWT = 'jwtToken';
+import { getLocalStorageJWT, isLoggedIn } from './auth';
 
 const HOST =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://codersquare.xyz';
@@ -30,17 +30,20 @@ export const queryClient = new QueryClient({
 });
 
 export async function callEndpoint<Request, Response>(
-  url: string,
-  method: 'get' | 'post' | 'delete',
-  request: Request
+  endpoint: EndpointConfig,
+  request?: Request
 ): Promise<Response> {
+  const {url, method, auth} = endpoint
+  const requestBody = request ? JSON.stringify(request) : undefined
   const response = await fetch(`${HOST}${url}`, {
     method: method,
     headers: {
-      Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
       'Content-Type': 'application/json',
+      // We include an Authorization header when it's explicitly required or 
+      // when the user is logged in. 
+      ...((auth || isLoggedIn()) && {Authorization: `Bearer ${getLocalStorageJWT()}`}),
     },
-    body: method === 'get' ? undefined : JSON.stringify(request),
+    body: requestBody,
   });
   if (!response.ok) {
     let msg = '';
