@@ -23,6 +23,19 @@ export enum Endpoints {
   deleteComment = 'deleteComment',
 }
 
+export function WithParams(endpoint: EndpointConfig, ...params: string[]): EndpointConfig {
+  let url = endpoint.url
+  const placeholders = url.split("/").filter(token => token.startsWith(":"))
+  for (let index = 0; index < Math.min(params.length, placeholders.length); index++) {
+    url = url.replace(placeholders[index], params[index])
+  }
+  return {
+    url: url, 
+    method: endpoint.method,
+    auth: endpoint.auth
+  } as EndpointConfig
+}
+
 export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   [Endpoints.healthz]: { method: 'get', url: '/api/v1/healthz' },
 
