@@ -19,10 +19,9 @@ export const Navbar = () => {
     signOut();
     navigate(ROUTES.HOME);
   }, [navigate]);
-  const { method, url } = ENDPOINT_CONFIGS.getCurrentUser;
   const { data: currentUser } = useQuery(
     ['getCurrentUser'],
-    () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(url, method, {}),
+    () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
     { enabled: isLoggedIn() }
   );
 
