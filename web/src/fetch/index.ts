@@ -1,9 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { isDev } from '../util';
+
 export const LOCAL_STORAGE_JWT = 'jwtToken';
 
-const HOST =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://codersquare.xyz';
+const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://codersquare.xyz';
 
 export class ApiError extends Error {
   public status: number;
@@ -34,12 +35,15 @@ export async function callEndpoint<Request, Response>(
   method: 'get' | 'post' | 'delete',
   request: Request
 ): Promise<Response> {
+  const jwt = localStorage.getItem(LOCAL_STORAGE_JWT);
   const response = await fetch(`${HOST}${url}`, {
     method: method,
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
-      'Content-Type': 'application/json',
-    },
+    headers: !jwt
+      ? undefined
+      : {
+          Authorization: `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        },
     body: method === 'get' ? undefined : JSON.stringify(request),
   });
   if (!response.ok) {

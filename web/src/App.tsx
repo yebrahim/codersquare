@@ -9,10 +9,11 @@ import { SignUp } from './pages/sign-up';
 import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
+import { isDev } from './util';
 
 export const App = () => {
   return (
-    <>
+    <Box h="100vh">
       <BrowserRouter>
         <Navbar />
 
@@ -27,6 +28,12 @@ export const App = () => {
           </Routes>
         </Box>
       </BrowserRouter>
-    </>
+
+      {isDev && (
+        <Box m={4} position="absolute" bottom={0} right={0} textTransform="uppercase" fontSize="xs">
+          development version
+        </Box>
+      )}
+    </Box>
   );
 };

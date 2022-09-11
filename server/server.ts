@@ -6,6 +6,7 @@ import asyncHandler from 'express-async-handler';
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
+import path from 'path';
 
 import { db, initDb } from './datastore';
 import { CommentHandler } from './handlers/commentHandler';
@@ -18,6 +19,7 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
 
 export async function createServer(dbPath: string, logRequests = true) {
   await initDb(dbPath);
+
   // read .env file
   dotenv.config();
 
@@ -27,6 +29,9 @@ export async function createServer(dbPath: string, logRequests = true) {
   // middlewares for parsing JSON payloads and opening up cors policy
   app.use(express.json());
   app.use(cors());
+
+  // serve static web resources
+  app.use('/', express.static(path.join(__dirname, '../web/build')));
 
   if (logRequests) {
     // log incoming Requests
