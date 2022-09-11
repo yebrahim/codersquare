@@ -2,8 +2,9 @@ import { EndpointConfig } from '@codersquare/shared';
 import { QueryClient } from '@tanstack/react-query';
 import { getLocalStorageJWT, isLoggedIn } from './auth';
 
-const HOST =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://codersquare.xyz';
+import { isDev } from '../util';
+
+const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://codersquare.xyz';
 
 export class ApiError extends Error {
   public status: number;

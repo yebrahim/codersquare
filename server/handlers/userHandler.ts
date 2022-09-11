@@ -64,8 +64,8 @@ export class UserHandler {
     const user: User = {
       id: crypto.randomUUID(),
       email,
-      firstName,
-      lastName,
+      firstName: firstName ?? '',
+      lastName: lastName ?? '',
       userName: userName,
       password: this.hashPassword(password),
     };

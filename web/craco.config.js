@@ -4,12 +4,10 @@ module.exports = {
     {
       plugin: {
         overrideWebpackConfig: ({ webpackConfig }) => {
-          const oneOfRule = webpackConfig.module.rules.find(
-            (rule) => rule.oneOf,
-          );
+          const oneOfRule = webpackConfig.module.rules.find(rule => rule.oneOf);
           if (oneOfRule) {
             const tsxRule = oneOfRule.oneOf.find(
-              (rule) => rule.test && rule.test.toString().includes('tsx'),
+              rule => rule.test && rule.test.toString().includes('tsx')
             );
 
             const newIncludePaths = [
