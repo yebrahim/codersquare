@@ -6,7 +6,7 @@ import {
   GetPostRequest,
   GetPostResponse,
   ListCommentsResponse,
-  WithParams,
+  withParams,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
@@ -26,7 +26,7 @@ export const ViewPost = () => {
     isLoading,
     refetch: refetchPost,
   } = useQuery(['viewpost'], () =>
-    callEndpoint<GetPostRequest, GetPostResponse>(WithParams(ENDPOINT_CONFIGS.getPost, postId!))
+    callEndpoint<GetPostRequest, GetPostResponse>(withParams(ENDPOINT_CONFIGS.getPost, postId!))
   );
   const {
     data: commentsData,
@@ -35,13 +35,13 @@ export const ViewPost = () => {
     refetch: refetchComments,
   } = useQuery(['listcomments'], () =>
     callEndpoint<{}, ListCommentsResponse>(
-      WithParams(ENDPOINT_CONFIGS.listComments, postId!)
+      withParams(ENDPOINT_CONFIGS.listComments, postId!)
     )
   );
   const [comment, setComment] = useState('');
   const submitComment = useCallback(async () => {
     await callEndpoint<CreateCommentRequest, CreateCommentResponse>(
-      WithParams(ENDPOINT_CONFIGS.createComment, postId!),
+      withParams(ENDPOINT_CONFIGS.createComment, postId!),
       { comment }
     );
     setComment('');

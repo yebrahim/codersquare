@@ -6,7 +6,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   Post,
-  WithParams
+  withParams
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
@@ -34,7 +34,7 @@ export const PostCard: React.FC<{ post: Post; refetch: () => unknown; hideDiscus
   const toggleLike = useCallback(
     async (postId: string, like: boolean) => {
       const endpoint = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
-      await callEndpoint<{}, {}>(WithParams(endpoint, postId));
+      await callEndpoint<{}, {}>(withParams(endpoint, postId));
       refetch();
     },
     [refetch]
@@ -116,7 +116,7 @@ const useGetUser = (userId: string) => {
     error,
     isLoading,
   } = useQuery([`getuser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(WithParams(ENDPOINT_CONFIGS.getUser, userId))
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, userId))
   );
   return { user, error, isLoading };
 };
@@ -124,7 +124,7 @@ const useGetUser = (userId: string) => {
 const useCountComments = (postId: string) => {
   const { data: countCommentsRes } = useQuery([`countComments${postId}`], () =>
     callEndpoint<CountCommentsRequest, CountCommentsResponse>(
-      WithParams(ENDPOINT_CONFIGS.countComments, postId),
+      withParams(ENDPOINT_CONFIGS.countComments, postId),
     )
   );
   return { countCommentsRes };

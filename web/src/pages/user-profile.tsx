@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, WithParams } from '@codersquare/shared';
+import { ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, withParams } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { callEndpoint } from '../fetch';
 export const UserProfile = () => {
   const { id } = useParams();
   const { data, error, isLoading } = useQuery([`getuser${id}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(WithParams(ENDPOINT_CONFIGS.getUser, id!))
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, id!))
   );
 
   if (isLoading) {

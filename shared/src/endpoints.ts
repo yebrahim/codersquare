@@ -23,10 +23,13 @@ export enum Endpoints {
   deleteComment = 'deleteComment',
 }
 
-export function WithParams(endpoint: EndpointConfig, ...params: string[]): EndpointConfig {
+export function withParams(endpoint: EndpointConfig, ...params: string[]): EndpointConfig {
   let url = endpoint.url
-  const placeholders = url.split("/").filter(token => token.startsWith(":"))
-  for (let index = 0; index < Math.min(params.length, placeholders.length); index++) {
+  const placeholders = url.match(/:[^\/]*/g) || []
+  if (placeholders.length !== params.length){
+    throw `Too ${placeholders.length < params.length ? "many" : "few"} params for: ${url}!`
+  }
+  for (let index = 0; index < params.length; index++) {
     url = url.replace(placeholders[index], params[index])
   }
   return {
