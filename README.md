@@ -10,3 +10,5 @@ and ERD in the docs directory for the desired experience.
 
 This is an MIT repo that we're using for learning, feel free to fork away and
 use as you wish.
+
+![Screenshot](/../main/docs/ui%20designs/1%20home%20page.png)
