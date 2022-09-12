@@ -27,7 +27,7 @@ export function withParams(endpoint: EndpointConfig, ...params: string[]): Endpo
   let url = endpoint.url;
   const placeholders = url.match(/:[^\/]*/g) || [];
   if (placeholders.length !== params.length) {
-    throw `Too ${placeholders.length < params.length ? 'many' : 'few'} params for: ${url}!`;
+    throw `Too ${placeholders.length < params.length ? 'many' : 'few'} params for url: ${url}!`;
   }
   for (let index = 0; index < params.length; index++) {
     url = url.replace(placeholders[index], params[index]);
