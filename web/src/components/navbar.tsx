@@ -21,7 +21,8 @@ export const Navbar = () => {
   }, [navigate]);
   const { data: currentUser } = useQuery(
     ['getCurrentUser'],
-    () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
+    () =>
+      callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
     { enabled: isLoggedIn() }
   );
 

@@ -34,9 +34,7 @@ export const ViewPost = () => {
     isLoading: commentsLoading,
     refetch: refetchComments,
   } = useQuery(['listcomments'], () =>
-    callEndpoint<{}, ListCommentsResponse>(
-      withParams(ENDPOINT_CONFIGS.listComments, postId!)
-    )
+    callEndpoint<{}, ListCommentsResponse>(withParams(ENDPOINT_CONFIGS.listComments, postId!))
   );
   const [comment, setComment] = useState('');
   const submitComment = useCallback(async () => {

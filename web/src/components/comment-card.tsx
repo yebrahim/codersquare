@@ -1,5 +1,11 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
-import { Comment, ENDPOINT_CONFIGS, withParams, GetUserRequest, GetUserResponse } from '@codersquare/shared';
+import {
+  Comment,
+  ENDPOINT_CONFIGS,
+  GetUserRequest,
+  GetUserResponse,
+  withParams,
+} from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
 import React from 'react';
@@ -18,9 +24,7 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
     error,
     isLoading,
   } = useQuery([`getuser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(
-      withParams(ENDPOINT_CONFIGS.getUser, userId)
-    )
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, userId))
   );
 
   const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;

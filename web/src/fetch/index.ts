@@ -1,8 +1,8 @@
 import { EndpointConfig } from '@codersquare/shared';
 import { QueryClient } from '@tanstack/react-query';
-import { getLocalStorageJWT, isLoggedIn } from './auth';
 
 import { isDev } from '../util';
+import { getLocalStorageJWT, isLoggedIn } from './auth';
 
 const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://codersquare.xyz';
 
@@ -34,15 +34,15 @@ export async function callEndpoint<Request, Response>(
   endpoint: EndpointConfig,
   request?: Request
 ): Promise<Response> {
-  const {url, method, auth} = endpoint
-  const requestBody = request ? JSON.stringify(request) : undefined
+  const { url, method, auth } = endpoint;
+  const requestBody = request ? JSON.stringify(request) : undefined;
   const response = await fetch(`${HOST}${url}`, {
     method: method,
     headers: {
       'Content-Type': 'application/json',
-      // We include an Authorization header when it's explicitly required or 
-      // when the user is logged in. 
-      ...((auth || isLoggedIn()) && {Authorization: `Bearer ${getLocalStorageJWT()}`}),
+      // We include an Authorization header when it's explicitly required or
+      // when the user is logged in.
+      ...((auth || isLoggedIn()) && { Authorization: `Bearer ${getLocalStorageJWT()}` }),
     },
     body: requestBody,
   });

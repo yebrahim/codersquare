@@ -11,8 +11,8 @@ import { callEndpoint } from '.';
 export const LOCAL_STORAGE_JWT = 'jwtToken';
 
 export const getLocalStorageJWT = (): string => {
-  return localStorage.getItem(LOCAL_STORAGE_JWT) || "";
-}
+  return localStorage.getItem(LOCAL_STORAGE_JWT) || '';
+};
 
 export const isLoggedIn = (): boolean => {
   const jwt = getLocalStorageJWT();
@@ -20,7 +20,10 @@ export const isLoggedIn = (): boolean => {
 };
 
 export const signIn = async (login: string, password: string) => {
-  const res = await callEndpoint<SignInRequest, SignInResponse>(ENDPOINT_CONFIGS.signin, { login, password });
+  const res = await callEndpoint<SignInRequest, SignInResponse>(ENDPOINT_CONFIGS.signin, {
+    login,
+    password,
+  });
   localStorage.setItem(LOCAL_STORAGE_JWT, res.jwt);
 };
 

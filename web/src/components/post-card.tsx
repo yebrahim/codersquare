@@ -6,7 +6,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   Post,
-  withParams
+  withParams,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
@@ -124,7 +124,7 @@ const useGetUser = (userId: string) => {
 const useCountComments = (postId: string) => {
   const { data: countCommentsRes } = useQuery([`countComments${postId}`], () =>
     callEndpoint<CountCommentsRequest, CountCommentsResponse>(
-      withParams(ENDPOINT_CONFIGS.countComments, postId),
+      withParams(ENDPOINT_CONFIGS.countComments, postId)
     )
   );
   return { countCommentsRes };
