@@ -26,8 +26,7 @@ export const NewPost = () => {
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
-        const { method, url: createPostUrl } = ENDPOINT_CONFIGS.createPost;
-        await callEndpoint<CreatePostRequest, CreatePostResponse>(createPostUrl, method, {
+        await callEndpoint<CreatePostRequest, CreatePostResponse>(ENDPOINT_CONFIGS.createPost, {
           title,
           url,
         });

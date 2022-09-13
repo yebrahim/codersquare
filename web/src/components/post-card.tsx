@@ -6,6 +6,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   Post,
+  withParams,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { formatDistance } from 'date-fns';
@@ -32,8 +33,8 @@ export const PostCard: React.FC<{ post: Post; refetch: () => unknown; hideDiscus
 
   const toggleLike = useCallback(
     async (postId: string, like: boolean) => {
-      const { method, url } = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
-      await callEndpoint<{}, {}>(url.replace(':postId', postId), method, {});
+      const endpoint = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
+      await callEndpoint<{}, {}>(withParams(endpoint, postId));
       refetch();
     },
     [refetch]
@@ -110,24 +111,20 @@ const getUrlDomain = (url: string): string => {
 };
 
 const useGetUser = (userId: string) => {
-  const { method, url } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
     error,
     isLoading,
   } = useQuery([`getuser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(url.replace(':id', userId), method, {})
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, userId))
   );
   return { user, error, isLoading };
 };
 
 const useCountComments = (postId: string) => {
-  const { method, url } = ENDPOINT_CONFIGS.countComments;
   const { data: countCommentsRes } = useQuery([`countComments${postId}`], () =>
     callEndpoint<CountCommentsRequest, CountCommentsResponse>(
-      url.replace(':postId', postId),
-      method,
-      { postId }
+      withParams(ENDPOINT_CONFIGS.countComments, postId)
     )
   );
   return { countCommentsRes };

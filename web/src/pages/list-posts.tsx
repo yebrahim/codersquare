@@ -7,9 +7,8 @@ import { callEndpoint } from '../fetch';
 
 export const ListPosts = () => {
   useDocumentTitle('Home');
-  const { url, method } = ENDPOINT_CONFIGS.listPosts;
   const { data, error, isLoading, refetch } = useQuery(['listposts'], () =>
-    callEndpoint<ListPostsRequest, ListPostsResponse>(url, method, {})
+    callEndpoint<ListPostsRequest, ListPostsResponse>(ENDPOINT_CONFIGS.listPosts)
   );
 
   if (isLoading) {
