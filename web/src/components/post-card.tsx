@@ -9,7 +9,7 @@ import {
   withParams,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
-import { formatDistance } from 'date-fns';
+import formatDistance from 'date-fns/formatDistance';
 import React, { useCallback } from 'react';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';

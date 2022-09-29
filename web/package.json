@@ -12,21 +12,20 @@
     "@types/node": "^16.11.48",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "framer-motion": "^7.2.1",
     "date-fns": "^2.29.2",
+    "framer-motion": "^7.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-linkify-it": "^1.0.7",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4"
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.7.4"
   },
+  "devDependencies": {},
   "scripts": {
     "start": "BROWSER=NONE craco start",
-    "build": "craco build",
-    "eject": "craco eject"
+    "build": "GENERATE_SOURCEMAP=false NODE_OPTIONS=--max_old_space_size=4096 craco --max_old_space_size=4096 build"
   },
   "eslintConfig": {
     "extends": [
