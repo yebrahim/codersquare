@@ -1,4 +1,5 @@
 import {
+  ERRORS,
   GetCurrentUserRequest,
   GetCurrentUserResponse,
   GetUserRequest,
@@ -51,14 +52,14 @@ export class UserHandler {
   public signUp: ExpressHandler<SignUpRequest, SignUpResponse> = async (req, res) => {
     const { email, firstName, lastName, password, userName } = req.body;
     if (!email || !userName || !password) {
-      return res.status(400).send({ error: 'Email, username, and password are required' });
+      return res.status(400).send({ error: ERRORS.USER_REQUIRED_FIELDS });
     }
 
     if (await this.db.getUserByEmail(email)) {
-      return res.status(403).send({ error: 'A user with this email already exists' });
+      return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
     }
     if (await this.db.getUserByUsername(userName)) {
-      return res.status(403).send({ error: 'A user with this username already exists' });
+      return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
     }
 
     const user: User = {

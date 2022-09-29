@@ -1,8 +1,8 @@
-import { EndpointConfig } from '@codersquare/shared';
+import { ERRORS, EndpointConfig } from '@codersquare/shared';
 import { QueryClient } from '@tanstack/react-query';
 
 import { isDev } from '../util';
-import { getLocalStorageJWT, isLoggedIn } from './auth';
+import { getLocalStorageJWT, isLoggedIn, signOut } from './auth';
 
 const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://codersquare.xyz';
 
@@ -50,6 +50,11 @@ export async function callEndpoint<Request, Response>(
     let msg = '';
     try {
       msg = (await response.json()).error;
+      // Sign user out and refresh if the token has expired
+      if (msg === ERRORS.TOKEN_EXPIRED) {
+        signOut();
+        window.location.reload();
+      }
     } finally {
       throw new ApiError(response.status, msg);
     }

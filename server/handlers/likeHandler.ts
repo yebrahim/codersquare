@@ -1,4 +1,4 @@
-import { Like, ListLikesResponse } from '@codersquare/shared';
+import { ERRORS, Like, ListLikesResponse } from '@codersquare/shared';
 
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
@@ -12,10 +12,10 @@ export class LikeHandler {
 
   public create: ExpressHandlerWithParams<{ postId: string }, null, {}> = async (req, res) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
     }
     if (!(await this.db.getPost(req.params.postId))) {
-      return res.status(404).send({ error: 'No post found with this ID' });
+      return res.status(404).send({ error: ERRORS.POST_NOT_FOUND });
     }
 
     let found = await this.db.exists({
@@ -23,7 +23,7 @@ export class LikeHandler {
       userId: res.locals.userId,
     });
     if (found) {
-      return res.status(400).send({ error: 'No more likes for same post, same userid' });
+      return res.status(400).send({ error: ERRORS.DUPLICATE_LIKE });
     }
 
     const likeForInsert: Like = {
@@ -37,10 +37,10 @@ export class LikeHandler {
 
   public delete: ExpressHandlerWithParams<{ postId: string }, null, {}> = async (req, res) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
     }
     if (!(await this.db.getPost(req.params.postId))) {
-      return res.status(404).send({ error: 'No post found with this ID' });
+      return res.status(404).send({ error: ERRORS.POST_NOT_FOUND });
     }
 
     const likeForDelete: Like = {
@@ -57,7 +57,7 @@ export class LikeHandler {
     res
   ) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
     }
     const count: Number = await this.db.getLikes(req.params.postId);
     return res.send({ likes: count });

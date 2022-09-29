@@ -4,6 +4,7 @@ import {
   CreateCommentRequest,
   CreateCommentResponse,
   DeleteCommentResponse,
+  ERRORS,
   ListCommentsResponse,
 } from '@codersquare/shared';
 import crypto from 'crypto';
@@ -23,11 +24,11 @@ export class CommentHandler {
     CreateCommentRequest,
     CreateCommentResponse
   > = async (req, res) => {
-    if (!req.params.postId) return res.status(400).send({ error: 'Post ID is missing' });
-    if (!req.body.comment) return res.status(400).send({ error: 'Comment is missing' });
+    if (!req.params.postId) return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
+    if (!req.body.comment) return res.status(400).send({ error: ERRORS.COMMENT_MISSING });
 
     if (!(await this.db.getPost(req.params.postId, res.locals.userId))) {
-      return res.status(404).send({ error: 'No post found with this ID' });
+      return res.status(404).send({ error: ERRORS.POST_NOT_FOUND });
     }
 
     const commentForInsertion: Comment = {
@@ -45,7 +46,7 @@ export class CommentHandler {
     req,
     res
   ) => {
-    if (!req.params.id) return res.status(404).send({ error: 'No Comment Id' });
+    if (!req.params.id) return res.status(404).send({ error: ERRORS.COMMENT_ID_MISSING });
     await this.db.deleteComment(req.params.id);
     return res.sendStatus(200);
   };
@@ -55,7 +56,7 @@ export class CommentHandler {
     res
   ) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
     }
     const comments = await this.db.listComments(req.params.postId);
     return res.send({ comments });
@@ -66,7 +67,7 @@ export class CommentHandler {
     res
   ) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.POST_ID_MISSING });
     }
     const count = await this.db.countComments(req.params.postId);
     return res.send({ count });
