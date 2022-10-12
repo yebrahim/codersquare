@@ -18,6 +18,7 @@ export class ApiError extends Error {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      networkMode: 'offlineFirst',
       retry(failureCount, error) {
         const { status } = error as ApiError;
         if (typeof status !== 'number') {
