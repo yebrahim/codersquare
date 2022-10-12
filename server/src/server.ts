@@ -1,6 +1,5 @@
 import { ENDPOINT_CONFIGS, Endpoints } from '@codersquare/shared';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
 import fs from 'fs';
@@ -19,9 +18,6 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
 
 export async function createServer(dbPath: string, logRequests = true) {
   await initDb(dbPath);
-
-  // read .env file
-  dotenv.config();
 
   // create express app
   const app = express();

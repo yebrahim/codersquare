@@ -4,11 +4,14 @@ import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
 import { Datastore } from '..';
+import { SEED_POSTS, SEED_USERS } from './seeds';
 
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
 
   public async openDb(dbPath: string) {
+    const { ENV } = process.env;
+
     // open the database
     try {
       console.log('Opening database file at:', dbPath);
@@ -27,6 +30,18 @@ export class SqlDataStore implements Datastore {
     await this.db.migrate({
       migrationsPath: path.join(__dirname, 'migrations'),
     });
+
+    console.log(process.env.ENV);
+    if (ENV === 'development') {
+      console.log('Seeding data...');
+
+      SEED_USERS.forEach(async u => {
+        if (!(await this.getUserById(u.id))) await this.createUser(u);
+      });
+      SEED_POSTS.forEach(async p => {
+        if (!(await this.getPostByUrl(p.url))) await this.createPost(p);
+      });
+    }
 
     return this;
   }

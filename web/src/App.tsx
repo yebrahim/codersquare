@@ -17,7 +17,7 @@ export const App = () => {
       <BrowserRouter>
         <Navbar />
 
-        <Box m={4} maxW="2xl">
+        <Box m={4}>
           <Routes>
             <Route path={ROUTES.HOME} element={<ListPosts />} />
             <Route path={ROUTES.VIEW_POST(':id')} element={<ViewPost />} />
