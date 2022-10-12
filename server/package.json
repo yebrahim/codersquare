@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "npm i && tsc",
-    "start": "nodemon index.ts",
-    "start:prod": "pm2 delete codersquare; pm2 start --name codersquare \"npx ts-node --transpile-only index.ts\"",
+    "start": "nodemon src/index.ts",
+    "start:prod": "pm2 delete codersquare; pm2 start --name codersquare \"npx ts-node --transpile-only src/index.ts\"",
     "test": "jest",
     "test:watch": "jest --watch"
   },
