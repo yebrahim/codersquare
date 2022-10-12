@@ -3,6 +3,7 @@ import {
   CreatePostResponse,
   DeletePostRequest,
   DeletePostResponse,
+  ERRORS,
   GetPostResponse,
   ListPostsRequest,
   ListPostsResponse,
@@ -31,8 +32,13 @@ export class PostHandler {
     if (!req.body.title || !req.body.url) {
       return res.sendStatus(400);
     }
-    // TODO: validate title and url are non-empty
-    // TODO: validate url is new, otherwise add +1 to existing post
+
+    const existing = await this.db.getPostByUrl(req.body.url);
+    if (existing) {
+      // A post with this url already exists
+      return res.status(400).send({ error: ERRORS.DUPLICATE_URL });
+    }
+
     const post: Post = {
       id: crypto.randomUUID(),
       postedAt: Date.now(),

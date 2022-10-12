@@ -86,6 +86,10 @@ export class SqlDataStore implements Datastore {
     );
   }
 
+  async getPostByUrl(url: string): Promise<Post | undefined> {
+    return await this.db.get<Post>(`SELECT * FROM posts WHERE url = ?`, url);
+  }
+
   async deletePost(id: string): Promise<void> {
     await this.db.run('Delete FROM posts WHERE id = ?', id);
   }

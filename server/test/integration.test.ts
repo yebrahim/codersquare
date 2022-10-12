@@ -86,6 +86,26 @@ describe('integration test', () => {
     }
   });
 
+  it('fails to create post with duplicate URL', async () => {
+    const postUrl = 'unique-post.com';
+
+    {
+      const { method, url } = ENDPOINT_CONFIGS.createPost;
+      await client[method](url)
+        .send({ title: 'first post', url: postUrl })
+        .set(await getAuthToken())
+        .expect(200);
+    }
+
+    {
+      const { method, url } = ENDPOINT_CONFIGS.createPost;
+      await client[method](url)
+        .send({ title: 'second post', url: postUrl })
+        .set(await getAuthToken())
+        .expect(400);
+    }
+  });
+
   it('likes first post, cannot like twice', async () => {
     const postId = await get1stPost();
     const { method, url } = ENDPOINT_CONFIGS.createLike;

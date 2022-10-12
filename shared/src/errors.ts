@@ -9,6 +9,7 @@ export enum ERRORS {
 
   POST_ID_MISSING = 'Post ID is missing',
   POST_NOT_FOUND = 'Post not found',
+  DUPLICATE_URL = 'A post with this URL already exists',
 
   COMMENT_MISSING = 'Comment is missing',
   COMMENT_ID_MISSING = 'Comment ID is missing',

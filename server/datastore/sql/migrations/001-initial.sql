@@ -15,5 +15,3 @@ CREATE TABLE posts (
   postedAt INTEGER NOT NULL,
   FOREIGN KEY (userId) REFERENCES users (id)
 );
-
-
