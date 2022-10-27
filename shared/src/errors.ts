@@ -4,6 +4,7 @@ export enum ERRORS {
 
   USER_NOT_FOUND = 'User not found',
   USER_REQUIRED_FIELDS = 'Email, username, and password are required',
+  USER_UPDATE_REQUIRED_FIELDS = 'New username is required',
   DUPLICATE_EMAIL = 'An account with this email already exists',
   DUPLICATE_USERNAME = 'An account with this username already exists',
 
