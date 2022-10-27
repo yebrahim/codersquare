@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { Dispatch, createContext, SetStateAction, useState } from 'react';
 
 import { Navbar } from './components/navbar';
 import { ListPosts } from './pages/list-posts';
@@ -10,23 +11,38 @@ import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
 import { isDev } from './util';
+import {
+  GetCurrentUserResponse,
+} from '@codersquare/shared';
+
+type UserContext = {
+  currentUser: GetCurrentUserResponse;
+  setCurrentUserGlobally: Dispatch<SetStateAction<GetCurrentUserResponse>>
+}
+export const UserCtx = createContext({} as UserContext);
 
 export const App = () => {
+
+  const [currentUser, setCurrentUserGlobally] = useState({} as GetCurrentUserResponse);
+  
+
   return (
     <Box h="100vh">
       <BrowserRouter>
-        <Navbar />
+        <UserCtx.Provider value={{currentUser, setCurrentUserGlobally}}>
+          <Navbar />
 
-        <Box m={4}>
-          <Routes>
-            <Route path={ROUTES.HOME} element={<ListPosts />} />
-            <Route path={ROUTES.VIEW_POST(':id')} element={<ViewPost />} />
-            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-            <Route path={ROUTES.NEW_POST} element={<NewPost />} />
-            <Route path={ROUTES.USER_PROFILE(':id')} element={<UserProfile />} />
-          </Routes>
-        </Box>
+          <Box m={4}>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<ListPosts />} />
+              <Route path={ROUTES.VIEW_POST(':id')} element={<ViewPost />} />
+              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+              <Route path={ROUTES.NEW_POST} element={<NewPost />} />
+              <Route path={ROUTES.USER_PROFILE(':id')} element={<UserProfile />} />
+            </Routes>
+          </Box>
+        </UserCtx.Provider>
       </BrowserRouter>
 
       {isDev && (

@@ -5,8 +5,9 @@ import {
   GetCurrentUserResponse,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserCtx } from '../App';
 
 import Logo from '../assets/logo.svg';
 import { callEndpoint } from '../fetch';
@@ -19,11 +20,16 @@ export const Navbar = () => {
     signOut();
     navigate(ROUTES.HOME);
   }, [navigate]);
+
+  const {setCurrentUserGlobally} = useContext(UserCtx)
   const { data: currentUser } = useQuery(
     ['getCurrentUser'],
     () =>
       callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
-    { enabled: isLoggedIn() }
+    { 
+      enabled: isLoggedIn(),
+      onSuccess: (currentUser) => setCurrentUserGlobally(currentUser)
+    }
   );
 
   return (
