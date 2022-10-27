@@ -1,4 +1,8 @@
-export type EndpointConfig = { url: string; method: 'patch' | 'get' | 'post' | 'delete'; auth?: boolean };
+export type EndpointConfig = {
+  url: string;
+  method: 'patch' | 'get' | 'post' | 'delete';
+  auth?: boolean;
+};
 
 export enum Endpoints {
   healthz = 'healthz',
@@ -7,7 +11,7 @@ export enum Endpoints {
   signup = 'signup',
   getUser = 'getUser',
   getCurrentUser = 'getCurrentUser',
-  updateCurrentUser = "updateCurrentUser",
+  updateCurrentUser = 'updateCurrentUser',
 
   listPosts = 'listPosts',
   getPost = 'getPost',

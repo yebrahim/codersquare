@@ -116,24 +116,25 @@ export class UserHandler {
     });
   };
 
-  public updateCurrentUser:  ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> = async (req, res) => {
-    const {userName, firstName, lastName} = req.body
-    if (!userName){
-      return res.status(400).send({error: ERRORS.USER_UPDATE_REQUIRED_FIELDS})
-    }
-    const existingUser = await this.db.getUserByUsername(userName)
-    if (existingUser && existingUser.id !== res.locals.userId) {
-      return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
-    }
-    const user = {
-      id: res.locals.userId,
-      userName,
-      firstName,
-      lastName
-    }
-    await this.db.updateCurrentUser(user)
-    return res.sendStatus(200)
-  }
+  public updateCurrentUser: ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> =
+    async (req, res) => {
+      const { userName, firstName, lastName } = req.body;
+      if (!userName) {
+        return res.status(400).send({ error: ERRORS.USER_UPDATE_REQUIRED_FIELDS });
+      }
+      const existingUser = await this.db.getUserByUsername(userName);
+      if (existingUser && existingUser.id !== res.locals.userId) {
+        return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+      }
+      const user = {
+        id: res.locals.userId,
+        userName,
+        firstName,
+        lastName,
+      };
+      await this.db.updateCurrentUser(user);
+      return res.sendStatus(200);
+    };
 
   private hashPassword(password: string): string {
     return crypto

@@ -55,14 +55,11 @@ export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'user
 
 export type GetCurrentUserRequest = {};
 export type GetCurrentUserResponse = Pick<
-User,
-'id' | 'firstName' | 'lastName' | 'userName' | 'email'
+  User,
+  'id' | 'firstName' | 'lastName' | 'userName' | 'email'
 >;
 
-export type UpdateCurrentUserRequest = Pick<
-  User,
- 'firstName' | 'lastName' | 'userName'
->;
+export type UpdateCurrentUserRequest = Pick<User, 'firstName' | 'lastName' | 'userName'>;
 export type UpdateCurrentUserResponse = {};
 
 export type GetUserByEmailRequest = { emailId: string };

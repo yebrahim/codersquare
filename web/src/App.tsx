@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
+import { GetCurrentUserResponse } from '@codersquare/shared';
+import React, { Dispatch, SetStateAction, createContext, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import React, { Dispatch, createContext, SetStateAction, useState } from 'react';
 
 import { Navbar } from './components/navbar';
 import { ListPosts } from './pages/list-posts';
@@ -11,25 +12,20 @@ import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
 import { isDev } from './util';
-import {
-  GetCurrentUserResponse,
-} from '@codersquare/shared';
 
 type UserContext = {
   currentUser: GetCurrentUserResponse;
-  setCurrentUserGlobally: Dispatch<SetStateAction<GetCurrentUserResponse>>
-}
+  setCurrentUserGlobally: Dispatch<SetStateAction<GetCurrentUserResponse>>;
+};
 export const UserCtx = createContext({} as UserContext);
 
 export const App = () => {
-
   const [currentUser, setCurrentUserGlobally] = useState({} as GetCurrentUserResponse);
-  
 
   return (
     <Box h="100vh">
       <BrowserRouter>
-        <UserCtx.Provider value={{currentUser, setCurrentUserGlobally}}>
+        <UserCtx.Provider value={{ currentUser, setCurrentUserGlobally }}>
           <Navbar />
 
           <Box m={4}>

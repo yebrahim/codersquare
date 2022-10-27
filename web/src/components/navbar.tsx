@@ -7,8 +7,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserCtx } from '../App';
 
+import { UserCtx } from '../App';
 import Logo from '../assets/logo.svg';
 import { callEndpoint } from '../fetch';
 import { isLoggedIn, signOut } from '../fetch/auth';
@@ -21,14 +21,14 @@ export const Navbar = () => {
     navigate(ROUTES.HOME);
   }, [navigate]);
 
-  const {setCurrentUserGlobally} = useContext(UserCtx)
+  const { setCurrentUserGlobally } = useContext(UserCtx);
   const { data: currentUser } = useQuery(
     ['getCurrentUser'],
     () =>
       callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
-    { 
+    {
       enabled: isLoggedIn(),
-      onSuccess: (currentUser) => setCurrentUserGlobally(currentUser)
+      onSuccess: currentUser => setCurrentUserGlobally(currentUser),
     }
   );
 
