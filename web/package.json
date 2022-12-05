@@ -24,7 +24,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "BROWSER=NONE craco start",
+    "start": "BROWSER=NONE REACT_APP_ENV=development REACT_APP_PORT=3000 craco start",
     "build": "GENERATE_SOURCEMAP=false NODE_OPTIONS=--max_old_space_size=4096 craco --max_old_space_size=4096 build"
   },
   "eslintConfig": {

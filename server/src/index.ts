@@ -1,15 +1,17 @@
 import dotenv from 'dotenv';
-import path from 'path';
 
 import { createServer } from './server';
 
 (async () => {
   // read .env file
-  dotenv.config({ path: path.join(__dirname, '.env') });
+  dotenv.config();
 
-  const dbPath = path.join(__dirname, 'datastore', 'sql', 'codersquare.sqlite');
-  const server = await createServer(dbPath);
+  const { ENV, PORT, DB_PATH } = process.env;
+  if (!ENV || !PORT || !DB_PATH) {
+    console.error('Missing some required env vars');
+    process.exit(1);
+  }
 
-  const { ENV, PORT } = process.env;
+  const server = await createServer(DB_PATH);
   server.listen(PORT, () => console.log(`Listening on port ${PORT} in ${ENV} environment`));
 })();

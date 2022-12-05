@@ -4,7 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { isDev } from '../util';
 import { getLocalStorageJWT, isLoggedIn, signOut } from './auth';
 
-const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://codersquare.xyz';
+const API_HOST = isDev ? `http://localhost:${window.location.port}` : 'https://api.codersquare.xyz';
 
 export class ApiError extends Error {
   public status: number;
@@ -37,7 +37,7 @@ export async function callEndpoint<Request, Response>(
 ): Promise<Response> {
   const { url, method, auth } = endpoint;
   const requestBody = request ? JSON.stringify(request) : undefined;
-  const response = await fetch(`${HOST}${url}`, {
+  const response = await fetch(`${API_HOST}${url}`, {
     method: method,
     headers: {
       'Content-Type': 'application/json',

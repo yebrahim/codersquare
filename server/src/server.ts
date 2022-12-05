@@ -2,9 +2,6 @@ import { ENDPOINT_CONFIGS, Endpoints } from '@codersquare/shared';
 import cors from 'cors';
 import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
-import fs from 'fs';
-import http from 'http';
-import https from 'https';
 
 import { db, initDb } from './datastore';
 import { CommentHandler } from './handlers/commentHandler';
@@ -83,12 +80,5 @@ export async function createServer(dbPath: string, logRequests = true) {
     throw 'Environment not defined, make sure to pass in env vars or have a .env file at root.';
   }
 
-  if (ENV === 'production') {
-    const key = fs.readFileSync('/home/codersquare-user/certs/privkey1.pem', 'utf-8');
-    const cert = fs.readFileSync('/home/codersquare-user/certs/cert1.pem', 'utf-8');
-
-    return https.createServer({ key, cert }, app);
-  } else {
-    return http.createServer(app);
-  }
+  return app;
 }

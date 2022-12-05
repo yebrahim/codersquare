@@ -16,13 +16,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: provision database
+        run: |
+          mkdir -p "$(dirname ${{ secrets.DB_PATH }})"
+          touch ${{ secrets.DB_PATH }}
       - name: install and build server
         run: |
           cd server
           npm install
-          touch datastore/sql/codersquare.sqlite
       - name: restart server
         env:
+          DB_PATH: ${{ secrets.DB_PATH }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
           ENV: ${{ secrets.ENV }}
