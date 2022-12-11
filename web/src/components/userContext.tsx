@@ -6,22 +6,22 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext } from 'react';
 
-import { callEndpoint } from './fetch';
-import { isLoggedIn } from './fetch/auth';
+import { callEndpoint } from '../fetch';
+import { isLoggedIn } from '../fetch/auth';
 
 type UserContext = {
-  currentUser: GetCurrentUserResponse | undefined;
-  refreshCurrentUser: any;
+  currentUser?: GetCurrentUserResponse;
+  refreshCurrentUser?: any;
 };
 
-type UserCtxProps = {
+type CurrentUserContextProviderProps = {
   children: ReactNode;
 };
 
 export const userContext = createContext({} as UserContext);
 export const useCurrentUser = () => useContext(userContext);
 
-export const CurrentUserContextProvider = ({ children }: UserCtxProps): JSX.Element => {
+export const CurrentUserContextProvider = ({ children }: CurrentUserContextProviderProps): JSX.Element => {
   const { data: currentUser, refetch: refreshCurrentUser } = useQuery(
     ['getCurrentUser'],
     () =>

@@ -12,7 +12,7 @@ import { FormEvent, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ApiError, callEndpoint } from '../fetch';
-import { useCurrentUser } from '../userContext';
+import { useCurrentUser } from '../components/userContext';
 
 enum UserProfileMode {
   EDITING,

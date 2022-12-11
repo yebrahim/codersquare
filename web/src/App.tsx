@@ -9,7 +9,7 @@ import { SignUp } from './pages/sign-up';
 import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
-import { CurrentUserContextProvider } from './userContext';
+import { CurrentUserContextProvider } from './components/userContext';
 import { isDev } from './util';
 
 export const App = () => {

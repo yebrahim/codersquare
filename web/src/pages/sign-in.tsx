@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
+import { useCurrentUser } from '../components/userContext';
 import { useDocumentTitle } from '../doc-title';
 import { isLoggedIn, signIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
@@ -13,12 +14,14 @@ export const SignIn = () => {
   const [un, setUn] = useState('');
   const [pw, setPw] = useState('');
   const [error, setError] = useState('');
+  const { refreshCurrentUser } = useCurrentUser();
 
   const signin = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
         await signIn(un, pw);
+        refreshCurrentUser();
         navigate(ROUTES.HOME);
       } catch {
         setError('Bad credentials');

@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
+import { useCurrentUser } from '../components/userContext';
 import { useDocumentTitle } from '../doc-title';
 import { ApiError } from '../fetch';
 import { isLoggedIn, signUp } from '../fetch/auth';
@@ -17,12 +18,14 @@ export const SignUp = () => {
   const [pw, setPw] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const { refreshCurrentUser } = useCurrentUser();
 
   const signup = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
         await signUp(fname, lname, email, pw, un);
+        refreshCurrentUser();
         navigate(ROUTES.HOME);
       } catch (e) {
         setError((e as ApiError).message);

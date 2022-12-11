@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/logo.svg';
 import { isLoggedIn, signOut } from '../fetch/auth';
 import { ROUTES } from '../routes';
-import { useCurrentUser } from '../userContext';
+import { useCurrentUser } from './userContext';
 
 export const Navbar = () => {
   const navigate = useNavigate();
