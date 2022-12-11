@@ -118,7 +118,7 @@ export class UserHandler {
 
   public updateCurrentUser: ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> =
     async (req, res) => {
-      const { currentUserId } = res.locals;
+      const currentUserId = res.locals.userId;
       const { userName } = req.body;
 
       if (userName && (await this.isDuplicateUserName(currentUserId, userName))) {
