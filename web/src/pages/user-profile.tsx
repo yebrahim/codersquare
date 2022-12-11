@@ -14,15 +14,21 @@ import { useParams } from 'react-router-dom';
 import { ApiError, callEndpoint } from '../fetch';
 import { useCurrentUser } from '../userContext';
 
+enum UserProfileMode {
+  EDITING,
+  VIEWING,
+}
+
 export const UserProfile = () => {
   const { id } = useParams();
   const [userName, setUserName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [editingMode, setEditingMode] = useState(false);
+  const [userProfileMode, setUserProfileMode] = useState(UserProfileMode.VIEWING);
   const [userUpdateError, setUserUpdateError] = useState('');
   const { currentUser, refreshCurrentUser } = useCurrentUser();
   const isOwnProfile = id === currentUser?.id;
+  const isEditingMode = userProfileMode === UserProfileMode.EDITING;
 
   // load user profile
   const { data, error, isLoading } = useQuery(
@@ -48,21 +54,28 @@ export const UserProfile = () => {
     );
   }, [userName, firstName, lastName]);
 
+  const handleSaveClick = async () => {
+    try {
+      await updateCurrentUser();
+      setUserUpdateError('');
+      refreshCurrentUser();
+      setUserProfileMode(UserProfileMode.VIEWING);
+    } catch (e) {
+      setUserUpdateError((e as ApiError).message);
+    }
+  };
+
+  const handleEditClick = () => {
+    setUserProfileMode(UserProfileMode.EDITING);
+  };
+
   const onEditOrSaveClick = async (e: FormEvent | MouseEvent) => {
     e.preventDefault();
-    if (editingMode) {
-      // transitioning from editionMode means that the user is updating their profile.
-      try {
-        await updateCurrentUser();
-        setUserUpdateError('');
-        refreshCurrentUser();
-      } catch (e) {
-        setUserUpdateError((e as ApiError).message);
-        return;
-      }
+    if (userProfileMode === UserProfileMode.EDITING) {
+      await handleSaveClick();
+    } else if (userProfileMode === UserProfileMode.VIEWING) {
+      handleEditClick();
     }
-    // toggle editingMode
-    setEditingMode(!editingMode);
   };
 
   if (isLoading) {
@@ -79,8 +92,8 @@ export const UserProfile = () => {
         <InputLeftAddon children="Username" />
         <Input
           paddingLeft={4}
-          value={editingMode ? userName : '@' + userName}
-          isDisabled={!editingMode}
+          value={isEditingMode ? userName : '@' + userName}
+          isDisabled={!isEditingMode}
           onChange={e => setUserName(e.target.value)}
         />
       </InputGroup>
@@ -89,7 +102,7 @@ export const UserProfile = () => {
         <Input
           paddingLeft={4}
           value={firstName}
-          isDisabled={!editingMode}
+          isDisabled={!isEditingMode}
           onChange={e => setFirstName(e.target.value)}
         />
       </InputGroup>
@@ -98,19 +111,19 @@ export const UserProfile = () => {
         <Input
           paddingLeft={4}
           value={lastName}
-          isDisabled={!editingMode}
+          isDisabled={!isEditingMode}
           onChange={e => setLastName(e.target.value)}
         />
       </InputGroup>
       {isOwnProfile && (
         <Button
           type="submit"
-          variant={editingMode ? 'solid' : 'outline'}
+          variant={isEditingMode ? 'solid' : 'outline'}
           size="sm"
           display="block"
           onClick={onEditOrSaveClick}
         >
-          {editingMode ? 'Save' : 'Edit'}
+          {isEditingMode ? 'Save' : 'Edit'}
         </Button>
       )}
 
