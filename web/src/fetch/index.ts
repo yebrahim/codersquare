@@ -37,7 +37,7 @@ export async function callEndpoint<Request, Response>(
 ): Promise<Response> {
   const { url, method, auth } = endpoint;
   const requestBody = request ? JSON.stringify(request) : undefined;
-  const response = await fetch(`${HOST}${url}`, {
+  const response = await fetch(`${API_HOST}${url}`, {
     method: method.toUpperCase(),
     headers: {
       'Content-Type': 'application/json',
