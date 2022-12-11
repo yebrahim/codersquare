@@ -1,6 +1,4 @@
 import { Box } from '@chakra-ui/react';
-import { GetCurrentUserResponse } from '@codersquare/shared';
-import React, { Dispatch, SetStateAction, createContext, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { Navbar } from './components/navbar';
@@ -11,21 +9,14 @@ import { SignUp } from './pages/sign-up';
 import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
+import { CurrentUserContextProvider } from './userContext';
 import { isDev } from './util';
 
-type UserContext = {
-  currentUser: GetCurrentUserResponse;
-  setCurrentUserGlobally: Dispatch<SetStateAction<GetCurrentUserResponse>>;
-};
-export const UserCtx = createContext({} as UserContext);
-
 export const App = () => {
-  const [currentUser, setCurrentUserGlobally] = useState({} as GetCurrentUserResponse);
-
   return (
     <Box h="100vh">
       <BrowserRouter>
-        <UserCtx.Provider value={{ currentUser, setCurrentUserGlobally }}>
+        <CurrentUserContextProvider>
           <Navbar />
 
           <Box m={4}>
@@ -38,7 +29,7 @@ export const App = () => {
               <Route path={ROUTES.USER_PROFILE(':id')} element={<UserProfile />} />
             </Routes>
           </Box>
-        </UserCtx.Provider>
+        </CurrentUserContextProvider>
       </BrowserRouter>
 
       {isDev && (

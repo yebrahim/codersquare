@@ -118,21 +118,29 @@ export class UserHandler {
 
   public updateCurrentUser: ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> =
     async (req, res) => {
-      const { userName, firstName, lastName } = req.body;
-      if (!userName) {
-        return res.status(400).send({ error: ERRORS.USER_UPDATE_REQUIRED_FIELDS });
+      const { userId } = res.locals;
+      const { userName } = req.body;
+
+      // check if we can update userName
+      if (userName) {
+        const userWithProvidedUserName = await this.db.getUserByUsername(userName);
+        if (userWithProvidedUserName && userWithProvidedUserName.id !== res.locals.userId) {
+          // if we have a user with this userName and it's not the authorized user
+          return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+        }
       }
-      const existingUser = await this.db.getUserByUsername(userName);
-      if (existingUser && existingUser.id !== res.locals.userId) {
-        return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+
+      const oldUser = await this.db.getUserById(userId);
+      if (!oldUser) {
+        return res.status(404).send({ error: ERRORS.USER_NOT_FOUND });
       }
-      const user = {
-        id: res.locals.userId,
-        userName,
-        firstName,
-        lastName,
-      };
-      await this.db.updateCurrentUser(user);
+
+      await this.db.updateCurrentUser({
+        id: userId,
+        userName: userName || oldUser?.userName,
+        firstName: req.body.firstName || oldUser?.firstName,
+        lastName: req.body.lastName || oldUser?.lastName,
+      });
       return res.sendStatus(200);
     };
 

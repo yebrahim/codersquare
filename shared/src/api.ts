@@ -59,7 +59,7 @@ export type GetCurrentUserResponse = Pick<
   'id' | 'firstName' | 'lastName' | 'userName' | 'email'
 >;
 
-export type UpdateCurrentUserRequest = Pick<User, 'firstName' | 'lastName' | 'userName'>;
+export type UpdateCurrentUserRequest = Partial<Omit<User, 'id' | 'email'>>;
 export type UpdateCurrentUserResponse = {};
 
 export type GetUserByEmailRequest = { emailId: string };

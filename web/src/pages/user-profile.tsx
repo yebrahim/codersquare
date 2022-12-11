@@ -8,11 +8,11 @@ import {
   withParams,
 } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
-import { FormEvent, useCallback, useContext, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { UserCtx } from '../App';
 import { ApiError, callEndpoint } from '../fetch';
+import { useCurrentUser } from '../userContext';
 
 export const UserProfile = () => {
   const { id } = useParams();
@@ -21,9 +21,10 @@ export const UserProfile = () => {
   const [lastName, setLastName] = useState('');
   const [editingMode, setEditingMode] = useState(false);
   const [userUpdateError, setUserUpdateError] = useState('');
-  const { currentUser } = useContext(UserCtx);
-  const isOwnProfile = id === currentUser.id;
+  const { currentUser, refreshCurrentUser } = useCurrentUser();
+  const isOwnProfile = id === currentUser?.id;
 
+  // load user profile
   const { data, error, isLoading } = useQuery(
     [`getuser${id}`],
     () => callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, id!)),
@@ -36,28 +37,31 @@ export const UserProfile = () => {
     }
   );
 
-  const updateCurrentUser = useCallback(
-    async (e: FormEvent | MouseEvent) => {
-      e.preventDefault();
-      try {
-        await callEndpoint<UpdateCurrentUserRequest, UpdateCurrentUserResponse>(
-          ENDPOINT_CONFIGS.updateCurrentUser,
-          {
-            userName,
-            firstName,
-            lastName,
-          }
-        );
-        window.location.reload();
-      } catch (e) {
-        setUserUpdateError((e as ApiError).message);
+  const updateCurrentUser = useCallback(async () => {
+    await callEndpoint<UpdateCurrentUserRequest, UpdateCurrentUserResponse>(
+      ENDPOINT_CONFIGS.updateCurrentUser,
+      {
+        userName,
+        firstName,
+        lastName,
       }
-    },
-    [userName, firstName, lastName]
-  );
+    );
+  }, [userName, firstName, lastName]);
 
   const onEditOrSaveClick = async (e: FormEvent | MouseEvent) => {
-    if (editingMode) await updateCurrentUser(e);
+    e.preventDefault();
+    if (editingMode) {
+      // transitioning from editionMode means that the user is updating their profile.
+      try {
+        await updateCurrentUser();
+        setUserUpdateError('');
+        refreshCurrentUser();
+      } catch (e) {
+        setUserUpdateError((e as ApiError).message);
+        return;
+      }
+    }
+    // toggle editingMode
     setEditingMode(!editingMode);
   };
 
