@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+import path from 'path';
 import superset from 'supertest';
 
 import { createServer } from '../server';
@@ -6,7 +8,8 @@ let client: superset.SuperTest<superset.Test>;
 
 export async function getTestServer() {
   if (!client) {
-    const server = await createServer(':memory:', false);
+    config({ path: path.join(__dirname, '/.env.test') });
+    const server = await createServer(false);
     client = superset(server);
   }
 

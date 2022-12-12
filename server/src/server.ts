@@ -12,7 +12,12 @@ import { enforceJwtMiddleware, jwtParseMiddleware } from './middleware/authMiddl
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
 
-export async function createServer(dbPath: string, logRequests = true) {
+export async function createServer(logRequests = true) {
+  const dbPath = process.env.DB_PATH;
+  if (!dbPath) {
+    console.error('DB_PATH env var missing');
+    process.exit(1);
+  }
   await initDb(dbPath);
 
   // create express app
