@@ -132,9 +132,9 @@ export class UserHandler {
 
       await this.db.updateCurrentUser({
         id: currentUserId,
-        userName: userName || currentUser?.userName,
-        firstName: req.body.firstName || currentUser?.firstName,
-        lastName: req.body.lastName || currentUser?.lastName,
+        userName: userName ?? currentUser.userName,
+        firstName: req.body.firstName ?? currentUser.firstName,
+        lastName: req.body.lastName ?? currentUser.lastName,
       });
       return res.sendStatus(200);
     };
@@ -142,7 +142,7 @@ export class UserHandler {
   private async isDuplicateUserName(currentUserId: string, newUserName: string): Promise<boolean> {
     const userWithProvidedUserName = await this.db.getUserByUsername(newUserName);
     // returns true if we have a user with this userName and it's not the authenticated user
-    return userWithProvidedUserName != undefined && userWithProvidedUserName.id !== currentUserId;
+    return (userWithProvidedUserName != undefined) && (userWithProvidedUserName.id !== currentUserId);
   }
 
   private hashPassword(password: string): string {

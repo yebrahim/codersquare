@@ -11,7 +11,7 @@ import { isLoggedIn } from '../fetch/auth';
 
 type UserContext = {
   currentUser?: GetCurrentUserResponse;
-  refreshCurrentUser?: any;
+  refreshCurrentUser: () => void;
 };
 
 type CurrentUserContextProviderProps = {

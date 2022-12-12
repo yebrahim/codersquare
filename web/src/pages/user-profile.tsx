@@ -21,24 +21,24 @@ enum UserProfileMode {
 
 export const UserProfile = () => {
   const { id } = useParams();
-  const [userName, setUserName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState<string>();
+  const [firstName, setFirstName] = useState<string | undefined>();
+  const [lastName, setLastName] = useState<string | undefined>();
   const [userProfileMode, setUserProfileMode] = useState(UserProfileMode.VIEWING);
-  const [userUpdateError, setUserUpdateError] = useState('');
+  const [userUpdateError, setUserUpdateError] = useState<string>();
   const { currentUser, refreshCurrentUser } = useCurrentUser();
   const isOwnProfile = id === currentUser?.id;
   const isEditingMode = userProfileMode === UserProfileMode.EDITING;
 
   // load user profile
-  const { data, error, isLoading } = useQuery(
+  const { error, isLoading } = useQuery(
     [`getuser${id}`],
     () => callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, id!)),
     {
       onSuccess: data => {
         setUserName(data.userName);
-        setFirstName(data.firstName || '');
-        setLastName(data.lastName || '');
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
       },
     }
   );
@@ -82,7 +82,7 @@ export const UserProfile = () => {
     return <div>loading...</div>;
   }
 
-  if (error || !data) {
+  if (error) {
     return <div>error loading user: {JSON.stringify(error)}</div>;
   }
 
