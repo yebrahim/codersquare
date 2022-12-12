@@ -31,7 +31,6 @@ export class SqlDataStore implements Datastore {
       migrationsPath: path.join(__dirname, 'migrations'),
     });
 
-    console.log(process.env.ENV);
     if (ENV === 'development') {
       console.log('Seeding data...');
 
