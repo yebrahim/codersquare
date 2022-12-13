@@ -38,7 +38,7 @@ export async function callEndpoint<Request, Response>(
   const { url, method, auth } = endpoint;
   const requestBody = request ? JSON.stringify(request) : undefined;
   const response = await fetch(`${API_HOST}${url}`, {
-    method: method,
+    method: method.toUpperCase(),
     headers: {
       'Content-Type': 'application/json',
       // We include an Authorization header when it's explicitly required or
