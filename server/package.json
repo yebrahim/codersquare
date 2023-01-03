@@ -19,10 +19,12 @@
     "express": "^4.17.2",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.19",
+    "pino": "^8.8.0",
+    "pino-pretty": "^9.1.1",
     "pm2": "^5.2.0",
     "sqlite": "^4.0.23",
     "sqlite3": "^5.1.1",
-    "nodemon": "^2.0.19",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

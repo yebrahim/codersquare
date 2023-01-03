@@ -4,6 +4,7 @@ import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
 import { Datastore } from '..';
+import { LOGGER } from '../../logging';
 import { SEED_POSTS, SEED_USERS } from './seeds';
 
 export class SqlDataStore implements Datastore {
@@ -14,14 +15,14 @@ export class SqlDataStore implements Datastore {
 
     // open the database
     try {
-      console.log('Opening database file at:', dbPath);
+      LOGGER.info('Opening database file at:', dbPath);
       this.db = await sqliteOpen({
         filename: dbPath,
         driver: sqlite3.Database,
         mode: sqlite3.OPEN_READWRITE,
       });
     } catch (e) {
-      console.error('Failed to open database at path:', dbPath, 'err:', e);
+      LOGGER.error('Failed to open database at path:', dbPath, 'err:', e);
       process.exit(1);
     }
 
@@ -32,7 +33,7 @@ export class SqlDataStore implements Datastore {
     });
 
     if (ENV === 'development') {
-      console.log('Seeding data...');
+      LOGGER.info('Seeding data...');
 
       SEED_USERS.forEach(async u => {
         if (!(await this.getUserById(u.id))) await this.createUser(u);
