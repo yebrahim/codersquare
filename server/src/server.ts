@@ -8,6 +8,7 @@ import { CommentHandler } from './handlers/commentHandler';
 import { LikeHandler } from './handlers/likeHandler';
 import { PostHandler } from './handlers/postHandler';
 import { UserHandler } from './handlers/userHandler';
+import { LOGGER } from './logging';
 import { enforceJwtMiddleware, jwtParseMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
@@ -15,7 +16,7 @@ import { loggerMiddleware } from './middleware/loggerMiddleware';
 export async function createServer(logRequests = true) {
   const dbPath = process.env.DB_PATH;
   if (!dbPath) {
-    console.error('DB_PATH env var missing');
+    LOGGER.error('DB_PATH env var missing');
     process.exit(1);
   }
   await initDb(dbPath);
