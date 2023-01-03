@@ -27,7 +27,7 @@ export const SignIn = () => {
         setError('Bad credentials');
       }
     },
-    [navigate, pw, un]
+    [navigate, pw, refreshCurrentUser, un]
   );
 
   useEffect(() => {

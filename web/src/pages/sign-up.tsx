@@ -31,7 +31,7 @@ export const SignUp = () => {
         setError((e as ApiError).message);
       }
     },
-    [fname, lname, email, pw, un, navigate]
+    [fname, lname, email, pw, un, refreshCurrentUser, navigate]
   );
 
   useEffect(() => {

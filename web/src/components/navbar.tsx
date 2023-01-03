@@ -14,7 +14,7 @@ export const Navbar = () => {
     signOut();
     refreshCurrentUser();
     navigate(ROUTES.HOME);
-  }, [navigate]);
+  }, [navigate, refreshCurrentUser]);
 
   return (
     <Flex py={4} px={10} align="center" justify="space-between" h={16}>
