@@ -8,6 +8,8 @@ import {
   SignInResponse,
   SignUpRequest,
   SignUpResponse,
+  UpdateCurrentUserRequest,
+  UpdateCurrentUserResponse,
   User,
 } from '@codersquare/shared';
 import crypto from 'crypto';
@@ -113,6 +115,35 @@ export class UserHandler {
       email: user.email,
     });
   };
+
+  public updateCurrentUser: ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> =
+    async (req, res) => {
+      const currentUserId = res.locals.userId;
+      const { userName } = req.body;
+
+      if (userName && (await this.isDuplicateUserName(currentUserId, userName))) {
+        return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+      }
+
+      const currentUser = await this.db.getUserById(currentUserId);
+      if (!currentUser) {
+        return res.status(404).send({ error: ERRORS.USER_NOT_FOUND });
+      }
+
+      await this.db.updateCurrentUser({
+        id: currentUserId,
+        userName: userName ?? currentUser.userName,
+        firstName: req.body.firstName ?? currentUser.firstName,
+        lastName: req.body.lastName ?? currentUser.lastName,
+      });
+      return res.sendStatus(200);
+    };
+
+  private async isDuplicateUserName(currentUserId: string, newUserName: string): Promise<boolean> {
+    const userWithProvidedUserName = await this.db.getUserByUsername(newUserName);
+    // returns true if we have a user with this userName and it's not the authenticated user
+    return (userWithProvidedUserName != undefined) && (userWithProvidedUserName.id !== currentUserId);
+  }
 
   private hashPassword(password: string): string {
     return crypto

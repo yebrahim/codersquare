@@ -5,7 +5,7 @@
     "build:server": "cd server && npm i && npm run build",
     "build:shared": "cd shared && npm i && npm run build",
     "build:web": "cd web && npm i && npm run build",
-    "build": "npm-run-all --parallel build:shared build:server build:web",
+    "build": "npm i && npm-run-all --parallel build:shared build:server build:web",
     "lint": "prettier . --write",
     "lint:check": "prettier . --check",
     "start:server": "cd server && npm start",

@@ -1,4 +1,9 @@
-export type EndpointConfig = { url: string; method: 'get' | 'post' | 'delete'; auth?: boolean };
+export type EndpointConfig = {
+  url: string;
+  method: 'patch' | 'get' | 'post' | 'delete';
+  auth?: boolean;
+  sensitive?: boolean; // Skips logging request body
+};
 
 export enum Endpoints {
   healthz = 'healthz',
@@ -7,6 +12,7 @@ export enum Endpoints {
   signup = 'signup',
   getUser = 'getUser',
   getCurrentUser = 'getCurrentUser',
+  updateCurrentUser = 'updateCurrentUser',
 
   listPosts = 'listPosts',
   getPost = 'getPost',
@@ -42,10 +48,11 @@ export function withParams(endpoint: EndpointConfig, ...params: string[]): Endpo
 export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   [Endpoints.healthz]: { method: 'get', url: '/api/v1/healthz' },
 
-  [Endpoints.signin]: { method: 'post', url: '/api/v1/signin' },
-  [Endpoints.signup]: { method: 'post', url: '/api/v1/signup' },
+  [Endpoints.signin]: { method: 'post', url: '/api/v1/signin', sensitive: true },
+  [Endpoints.signup]: { method: 'post', url: '/api/v1/signup', sensitive: true },
   [Endpoints.getUser]: { method: 'get', url: '/api/v1/users/:id' },
   [Endpoints.getCurrentUser]: { method: 'get', url: '/api/v1/users', auth: true },
+  [Endpoints.updateCurrentUser]: { method: 'patch', url: '/api/v1/users', auth: true },
 
   [Endpoints.listPosts]: { method: 'get', url: '/api/v1/posts' },
   [Endpoints.getPost]: { method: 'get', url: '/api/v1/posts/:id' },

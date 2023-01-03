@@ -57,6 +57,15 @@ export class SqlDataStore implements Datastore {
     );
   }
 
+  async updateCurrentUser(user: User): Promise<void> {
+    await this.db.run(
+      'UPDATE users SET userName = ?, firstName = ?, lastName = ? WHERE id = ?',
+      user.userName,
+      user.firstName,
+      user.lastName,
+      user.id
+    );
+  }
   getUserById(id: string): Promise<User | undefined> {
     return this.db.get<User>(`SELECT * FROM users WHERE id = ?`, id);
   }

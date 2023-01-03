@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npm i && tsc",
-    "start": "nodemon src/index.ts",
+    "start": "touch /tmp/codersquare.sqlite && nodemon src/index.ts",
     "start:prod": "pm2 delete codersquare; pm2 start --name codersquare \"npx ts-node --transpile-only src/index.ts\"",
     "test": "jest",
     "test:watch": "jest --watch"

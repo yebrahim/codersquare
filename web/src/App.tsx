@@ -9,24 +9,27 @@ import { SignUp } from './pages/sign-up';
 import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
+import { CurrentUserContextProvider } from './components/userContext';
 import { isDev } from './util';
 
 export const App = () => {
   return (
     <Box h="100vh">
       <BrowserRouter>
-        <Navbar />
+        <CurrentUserContextProvider>
+          <Navbar />
 
-        <Box m={4}>
-          <Routes>
-            <Route path={ROUTES.HOME} element={<ListPosts />} />
-            <Route path={ROUTES.VIEW_POST(':id')} element={<ViewPost />} />
-            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-            <Route path={ROUTES.NEW_POST} element={<NewPost />} />
-            <Route path={ROUTES.USER_PROFILE(':id')} element={<UserProfile />} />
-          </Routes>
-        </Box>
+          <Box m={4}>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<ListPosts />} />
+              <Route path={ROUTES.VIEW_POST(':id')} element={<ViewPost />} />
+              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+              <Route path={ROUTES.NEW_POST} element={<NewPost />} />
+              <Route path={ROUTES.USER_PROFILE(':id')} element={<UserProfile />} />
+            </Routes>
+          </Box>
+        </CurrentUserContextProvider>
       </BrowserRouter>
 
       {isDev && (
