@@ -29,6 +29,7 @@ jobs:
           DB_PATH: ${{ secrets.DB_PATH }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
+          LOGTAIL_TOKEN: ${{ secrets.LOGTAIL_TOKEN }}
           ENV: ${{ secrets.ENV }}
           PORT: ${{ secrets.PORT }}
         run: |

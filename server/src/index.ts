@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 import { LOGGER } from './logging';
 import { createServer } from './server';
 
-(async () => {
-  // read .env file
-  dotenv.config();
+// read .env file
+dotenv.config();
 
+(async () => {
   const { ENV, PORT } = process.env;
   if (!ENV || !PORT) {
     LOGGER.error('Missing some required env vars');
