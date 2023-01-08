@@ -14,7 +14,6 @@
     "@types/react-dom": "^18.0.6",
     "date-fns": "^2.29.2",
     "framer-motion": "^7.2.1",
-    "mixpanel-browser": "^2.45.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
@@ -45,8 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
-  "devDependencies": {
-    "@types/mixpanel-browser": "^2.38.0"
-  }
+  "proxy": "http://localhost:3001"
 }

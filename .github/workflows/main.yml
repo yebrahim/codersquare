@@ -30,6 +30,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
           LOGTAIL_TOKEN: ${{ secrets.LOGTAIL_TOKEN }}
+          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
           ENV: ${{ secrets.ENV }}
           PORT: ${{ secrets.PORT }}
         run: |

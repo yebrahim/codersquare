@@ -7,6 +7,7 @@ export type EndpointConfig = {
 
 export enum Endpoints {
   healthz = 'healthz',
+  track = 'track',
 
   signin = 'signin',
   signup = 'signup',
@@ -47,6 +48,7 @@ export function withParams(endpoint: EndpointConfig, ...params: string[]): Endpo
 
 export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   [Endpoints.healthz]: { method: 'get', url: '/api/v1/healthz' },
+  [Endpoints.track]: { method: 'post', url: '/api/v1/track' },
 
   [Endpoints.signin]: { method: 'post', url: '/api/v1/signin', sensitive: true },
   [Endpoints.signup]: { method: 'post', url: '/api/v1/signup', sensitive: true },

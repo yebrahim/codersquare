@@ -1,5 +1,11 @@
 import { Comment, Post, User } from './types';
 
+// Tracking APIs
+export interface TrackRequest {
+  eventName: string;
+  payload?: unknown;
+}
+
 // Post APIs
 export interface ListPostsRequest {}
 export interface ListPostsResponse {

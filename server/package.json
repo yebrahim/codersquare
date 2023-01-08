@@ -21,6 +21,7 @@
     "express": "^4.17.2",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "mixpanel": "^0.17.0",
     "nodemon": "^2.0.19",
     "pino": "^8.8.0",
     "pino-pretty": "^9.1.1",

@@ -1,7 +1,8 @@
-import { ENDPOINT_CONFIGS, Endpoints } from '@codersquare/shared';
+import { ENDPOINT_CONFIGS, Endpoints, TrackRequest } from '@codersquare/shared';
 import cors from 'cors';
 import express, { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
+import mixpanel from 'mixpanel';
 
 import { db, initDb } from './datastore';
 import { CommentHandler } from './handlers/commentHandler';
@@ -12,6 +13,7 @@ import { LOGGER } from './logging';
 import { enforceJwtMiddleware, jwtParseMiddleware } from './middleware/authMiddleware';
 import { errHandler } from './middleware/errorMiddleware';
 import { loggerMiddleware } from './middleware/loggerMiddleware';
+import { ExpressHandler } from './types';
 
 export async function createServer(logRequests = true) {
   const dbPath = process.env.DB_PATH;
@@ -20,6 +22,21 @@ export async function createServer(logRequests = true) {
     process.exit(1);
   }
   await initDb(dbPath);
+
+  const mixpanelToken = process.env.MIXPANEL_TOKEN;
+  if (!mixpanelToken) {
+    LOGGER.error('MIXPANEL_TOKEN en var is missing');
+    process.exit(1);
+  }
+  const mixpanelTracker = mixpanel.init(mixpanelToken);
+
+  const trackHandler: ExpressHandler<TrackRequest, any> = (req, res) => {
+    if (!req.body.eventName) {
+      return res.status(400).send({ error: 'Missing event name' });
+    }
+    mixpanelTracker.track(req.body.eventName, req.body.payload ?? {}, undefined);
+    res.send({ status: 'ok' });
+  };
 
   // create express app
   const app = express();
@@ -41,6 +58,7 @@ export async function createServer(logRequests = true) {
   // map of endpoints handlers
   const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
     [Endpoints.healthz]: (_, res) => res.send({ status: 'ok!' }),
+    [Endpoints.track]: trackHandler,
 
     [Endpoints.signin]: userHandler.signIn,
     [Endpoints.signup]: userHandler.signUp,
