@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { Navbar } from './components/navbar';
+import { CurrentUserContextProvider } from './contexts/userContext';
 import { ListPosts } from './pages/list-posts';
 import { NewPost } from './pages/new-post';
 import { SignIn } from './pages/sign-in';
@@ -9,7 +10,6 @@ import { SignUp } from './pages/sign-up';
 import { UserProfile } from './pages/user-profile';
 import { ViewPost } from './pages/view-post';
 import { ROUTES } from './routes';
-import { CurrentUserContextProvider } from './components/userContext';
 import { isDev } from './util';
 
 export const App = () => {
