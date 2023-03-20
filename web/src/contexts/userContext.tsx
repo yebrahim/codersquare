@@ -21,7 +21,9 @@ type CurrentUserContextProviderProps = {
 export const userContext = createContext({} as UserContext);
 export const useCurrentUser = () => useContext(userContext);
 
-export const CurrentUserContextProvider = ({ children }: CurrentUserContextProviderProps): JSX.Element => {
+export const CurrentUserContextProvider = ({
+  children,
+}: CurrentUserContextProviderProps): JSX.Element => {
   const { data: currentUser, refetch: refreshCurrentUser } = useQuery(
     ['getCurrentUser'],
     () =>

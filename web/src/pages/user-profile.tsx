@@ -11,8 +11,8 @@ import { useQuery } from '@tanstack/react-query';
 import { FormEvent, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useCurrentUser } from '../contexts/userContext';
 import { ApiError, callEndpoint } from '../fetch';
-import { useCurrentUser } from '../components/userContext';
 
 enum UserProfileMode {
   EDITING,

@@ -3,7 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequiredInput } from '../components/required-input';
-import { useCurrentUser } from '../components/userContext';
+import { useCurrentUser } from '../contexts/userContext';
 import { useDocumentTitle } from '../doc-title';
 import { ApiError } from '../fetch';
 import { isLoggedIn, signUp } from '../fetch/auth';
