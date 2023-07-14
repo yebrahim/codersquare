@@ -6,6 +6,11 @@ export enum ERRORS {
   USER_REQUIRED_FIELDS = 'Email, username, and password are required',
   DUPLICATE_EMAIL = 'An account with this email already exists',
   DUPLICATE_USERNAME = 'An account with this username already exists',
+  INVALID_EMAIL = 'Invalid email',
+  WEAK_PASSWORD = 'Weak password',
+  INVALID_USERNAME = 'Username must have only letters and numbers',
+  INVALID_FIRSTNAME = 'First name must have only letters and numbers',
+  INVALID_LASTNAME = 'Last name must have only letters and numbers',
 
   POST_ID_MISSING = 'Post ID is missing',
   POST_NOT_FOUND = 'Post not found',

@@ -17,6 +17,7 @@ import crypto from 'crypto';
 import { signJwt } from '../auth';
 import { Datastore } from '../datastore';
 import { ExpressHandler, ExpressHandlerWithParams } from '../types';
+import validator from 'validator'
 
 export class UserHandler {
   private db: Datastore;
@@ -56,6 +57,12 @@ export class UserHandler {
     if (!email || !userName || !password) {
       return res.status(400).send({ error: ERRORS.USER_REQUIRED_FIELDS });
     }
+
+    if (!validator.isEmail(email)) return res.status(400).send({ error: ERRORS.INVALID_EMAIL});
+    if (!validator.isAlphanumeric(userName)) return res.status(400).send({ error: ERRORS.INVALID_USERNAME});
+    if (!validator.isStrongPassword(password)) return res.status(400).send({ error: ERRORS.WEAK_PASSWORD});
+    if (firstName && !validator.isAlphanumeric(firstName)) return res.status(400).send({ error: ERRORS.INVALID_FIRSTNAME});
+    if (lastName && !validator.isAlphanumeric(lastName)) return res.status(400).send({ error: ERRORS.INVALID_LASTNAME});
 
     if (await this.db.getUserByEmail(email)) {
       return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
@@ -120,6 +127,8 @@ export class UserHandler {
     async (req, res) => {
       const currentUserId = res.locals.userId;
       const { userName } = req.body;
+
+      if (userName && !validator.isAlphanumeric(userName)) return res.status(400).send({ error: ERRORS.INVALID_USERNAME});
 
       if (userName && (await this.isDuplicateUserName(currentUserId, userName))) {
         return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
